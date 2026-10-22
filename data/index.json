@@ -1,0 +1,80 @@
+{
+  "archives": [
+    {
+      "asset": "2026-10-16.bf64b653395c9d1396503cb0e7cdeb2e19445d26e285a680545925b5df125d62.jsonl.gz",
+      "bytes": 653509,
+      "day": "2026-10-16",
+      "release_tag": "data-2026-10",
+      "rows": 6251,
+      "sha256": "bf64b653395c9d1396503cb0e7cdeb2e19445d26e285a680545925b5df125d62"
+    },
+    {
+      "asset": "2026-10-17.bcdce54d9a03baf2adb880515ac25f0488b46e8942a38e93e6cc870128273405.jsonl.gz",
+      "bytes": 1231355,
+      "day": "2026-10-17",
+      "release_tag": "data-2026-10",
+      "rows": 10936,
+      "sha256": "bcdce54d9a03baf2adb880515ac25f0488b46e8942a38e93e6cc870128273405"
+    },
+    {
+      "asset": "2026-10-18.67876931252fc968ace1c1a8d0c5769760042f18dbdcaf16686aac1c259d92a0.jsonl.gz",
+      "bytes": 214679,
+      "day": "2026-10-18",
+      "release_tag": "data-2026-10",
+      "rows": 2192,
+      "sha256": "67876931252fc968ace1c1a8d0c5769760042f18dbdcaf16686aac1c259d92a0"
+    },
+    {
+      "asset": "2026-10-19.4b212ba7d0493c58ebbd6458865f4152fc595a2a660ee23b5314f99ccdf2c802.jsonl.gz",
+      "bytes": 367444,
+      "day": "2026-10-19",
+      "release_tag": "data-2026-10",
+      "rows": 3625,
+      "sha256": "4b212ba7d0493c58ebbd6458865f4152fc595a2a660ee23b5314f99ccdf2c802"
+    },
+    {
+      "asset": "2026-10-20.f9d24e9c8f07e654fc91b4a051a62fff60772ab0c905372b3b5ccff4d3f7f81c.jsonl.gz",
+      "bytes": 606809,
+      "day": "2026-10-20",
+      "release_tag": "data-2026-10",
+      "rows": 5761,
+      "sha256": "f9d24e9c8f07e654fc91b4a051a62fff60772ab0c905372b3b5ccff4d3f7f81c"
+    },
+    {
+      "asset": "2026-10-21.89457d0bee134f096fc2da59d79a1c8e4741ec700a5fea4d074b155c1a7c07df.jsonl.gz",
+      "bytes": 573912,
+      "day": "2026-10-21",
+      "release_tag": "data-2026-10",
+      "rows": 5493,
+      "sha256": "89457d0bee134f096fc2da59d79a1c8e4741ec700a5fea4d074b155c1a7c07df"
+    },
+    {
+      "asset": "2026-10-22.152d7b8c7d2ac6a36059c5f843ceddaa556ff6591023657ec6b061574fdf0e42.jsonl.gz",
+      "bytes": 1078473,
+      "day": "2026-10-22",
+      "release_tag": "data-2026-10",
+      "rows": 9762,
+      "sha256": "152d7b8c7d2ac6a36059c5f843ceddaa556ff6591023657ec6b061574fdf0e42"
+    },
+    {
+      "asset": "2026-10-23.89dd95e4eb017f4f10c45665d9b14a0328ac466a36420b6f10e5569c0da4ff42.jsonl.gz",
+      "bytes": 944613,
+      "day": "2026-10-23",
+      "release_tag": "data-2026-10",
+      "rows": 8405,
+      "sha256": "89dd95e4eb017f4f10c45665d9b14a0328ac466a36420b6f10e5569c0da4ff42"
+    }
+  ],
+  "metric_version": 1,
+  "scan": {
+    "changed_files": 95,
+    "duplicates": 0,
+    "files": 3577,
+    "incomplete_lines": 0,
+    "malformed_lines": 0
+  },
+  "schema_version": 1,
+  "since": "2026-10-16",
+  "source_cutoff": "2026-10-22T18:40:47.724Z",
+  "timezone": "Asia/Seoul"
+}

@@ -1,0 +1,15 @@
+# All local collector and archive caches, including nested projects.
+.cache/
+__pycache__/
+*.py[cod]
+
+# Never track compressed per-response archives or raw source logs.
+*.gz
+*.gzip
+*.jsonl
+*.ndjson
+*.log
+*.log.*
+raw/
+logs/
+.DS_Store

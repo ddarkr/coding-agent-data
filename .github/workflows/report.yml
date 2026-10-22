@@ -1,0 +1,92 @@
+name: Report
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/index.json
+      - analyze.py
+      - .github/workflows/report.yml
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      rebuild:
+        description: Rebuild all daily aggregates
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: report-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Self-test and validate without downloads
+        run: |
+          python3 analyze.py self-test
+          python3 analyze.py validate
+
+  report:
+    needs: validate
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_SHA: ${{ github.sha }}
+      REBUILD: ${{ github.event_name == 'workflow_dispatch' && inputs.rebuild || false }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore sanitized archives only
+        uses: actions/cache@v4
+        with:
+          path: .cache/archives
+          key: archives-v1-${{ runner.os }}-${{ hashFiles('data/index.json', 'analyze.py') }}
+          restore-keys: |
+            archives-v1-${{ runner.os }}-
+      - name: Render from verified archive bytes
+        run: |
+          args=()
+          if [[ "$REBUILD" == "true" ]]; then args+=(--rebuild); fi
+          python3 analyze.py report --repo "$GITHUB_REPOSITORY" "${args[@]}"
+          python3 analyze.py validate
+      - name: Commit changed generated outputs only
+        run: |
+          set -euo pipefail
+          remote_sha="$(git ls-remote --exit-code origin refs/heads/main | cut -f1)"
+          if [[ "$remote_sha" != "$SOURCE_SHA" ]]; then
+            echo 'Source is no longer the main tip; refusing stale output commit.'
+            exit 1
+          fi
+          git add -- README.md report.svg fast-comparison.svg data/monthly
+          if git diff --cached --quiet; then
+            echo 'Generated outputs are unchanged.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update generated coding-agent report'
+          # A concurrent main update after the guard makes this non-force push fail.
+          git push origin HEAD:refs/heads/main
