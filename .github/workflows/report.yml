@@ -80,7 +80,7 @@ jobs:
             echo 'Source is no longer the main tip; refusing stale output commit.'
             exit 1
           fi
-          git add -- README.md report.svg fast-comparison.svg data/monthly
+          git add -- README.md HANDOFF.md report.svg fast-comparison.svg data/monthly
           if git diff --cached --quiet; then
             echo 'Generated outputs are unchanged.'
             exit 0

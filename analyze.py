@@ -980,6 +980,12 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
     begin, end = '<!-- REPORT:START -->', '<!-- REPORT:END -->'
     if narrative.count(begin) != 1 or narrative.count(end) != 1 or narrative.index(begin) >= narrative.index(end):
         raise ValueError('README requires exactly one ordered REPORT marker pair')
+    handoff = project / 'HANDOFF.md'
+    handoff_narrative = handoff.read_text(encoding='utf-8')
+    history_begin, history_end = '<!-- HISTORY:START -->', '<!-- HISTORY:END -->'
+    if (handoff_narrative.count(history_begin) != 1 or handoff_narrative.count(history_end) != 1
+        or handoff_narrative.index(history_begin) >= handoff_narrative.index(history_end)):
+        raise ValueError('HANDOFF requires exactly one ordered HISTORY marker pair')
     analysis_hash = hashlib.sha256((project / 'analyze.py').read_bytes()).hexdigest()
     monthly_dir = project / 'data' / 'monthly'
     monthly_dir.mkdir(parents=True, exist_ok=True)
@@ -1047,12 +1053,13 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
     svg = render_svg(buckets, cutoff)
     summary = summarize_samples(recent)
     lines = [f'## Latest {days} KST dates', '', f'Cutoff: **{_report_md(iso_utc(cutoff))}**. Source coverage: {index["since"]} through {_report_md(index["source_cutoff"])}.', '',
+             '[운영·사용법·장기 통계](HANDOFF.md)', '',
              '![Coding agent pulse](report.svg)', '',
              f'Successful timed responses: **{summary["n"]:,}** across **{summary["sessions"]:,}** sessions. Excluded: errors {summary["errors"]:,}, aborted {summary["aborted"]:,}, other/invalid timing or output {summary["invalid"]:,}. Generation-eligible: {summary["generation_n"]:,}.', '',
              '| Provider / model / tier | n | Sessions | Gen TPS | E2E TPS | TTFT median ms |', '|---|---:|---:|---:|---:|---:|']
     for group in _report_groups(recent):
         lines.append('| '+_report_md(' / '.join(_report_key(group)))+' | '+ ' | '.join(str(group[k]) if k in ('n','sessions') else _report_number(group[k]) for k in ('n','sessions','generation_tps','e2e_tps','ttft_median_ms'))+' |')
-    lines += ['', '### Fast comparison · matched 3-hour buckets', '',
+    lines += ['', '## Fast comparison · matched 3-hour buckets', '',
               'Priority and default are compared only within the same provider/model and buckets containing valid timed responses from both tiers. Unknown/auto/flex/scale are not default. Observational, not causal; workload and session differences remain. Fewer than 30 responses or 5 sessions per tier is a tiny sample.', '',
               '![일반과 Fast 비교](fast-comparison.svg)', '',
               '<details>', '<summary>표본·TTFT·토큰 길이 상세</summary>', '',
@@ -1073,6 +1080,8 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
             comparisons.append(dict(provider=pair[0],model=pair[1],tier=tier,matched_buckets=len(overlap),**stats))
             lines.append('| '+_report_md(' / '.join(pair))+' | '+tier+warning+' | '+str(len(overlap))+' | '+' | '.join(str(stats[k]) if k in ('n','sessions') else _report_number(stats[k]) for k in ('n','sessions','generation_tps','e2e_tps','ttft_median_ms','input_median_tokens','context_median_tokens','output_median_tokens'))+' |')
     lines += ['', '</details>', '']
+    report_lines = lines
+    lines = []
     # Twelve calendar months, with daily rates taken from direct per-day populations.
     month_number = local_cutoff.year * 12 + local_cutoff.month - 1
     first_number = month_number - 11
@@ -1099,11 +1108,16 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
         e2e = totals['output_tokens']*1000/totals['duration_ms'] if totals['duration_ms'] else None
         lines.append(f'| {month} | {len(observed)} | {totals["n"]} | {_report_number(gen)} | {_report_number(e2e)} | {totals["errors"]} / {totals["aborted"]} / {totals["invalid"]} |')
     lines += ['', 'Timing is local client-observed. TTFT must be finite and 0 ≤ TTFT < duration for generation TPS; otherwise the response can remain E2E-valid. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.', '']
-    replacement = begin+'\n\n'+'\n'.join(lines)+'\n'+end
+    replacement = begin+'\n\n'+'\n'.join(report_lines)+'\n'+end
     updated = narrative[:narrative.index(begin)] + replacement + narrative[narrative.index(end)+len(end):]
+    history_replacement = history_begin+'\n\n'+'\n'.join(lines)+'\n'+history_end
+    updated_handoff = (handoff_narrative[:handoff_narrative.index(history_begin)]
+                       + history_replacement
+                       + handoff_narrative[handoff_narrative.index(history_end)+len(history_end):])
     _report_text(project/'report.svg', svg)
     _report_text(project/'fast-comparison.svg', render_fast_svg(comparisons, cutoff, days))
     _report_text(readme, updated)
+    _report_text(handoff, updated_handoff)
     return dict(rebuilt_days=rebuilt_days,reused_days=reused_days,normal_responses=summary['n'],
                 cutoff=iso_utc(cutoff),comparison=comparisons,**{k:v for k,v in summary.items() if k!='n'})
 
@@ -1299,6 +1313,7 @@ class ReportTests(unittest.TestCase):
             project = Path(directory)
             (project/'analyze.py').write_text('# fixture\n',encoding='utf-8')
             (project/'README.md').write_text('before\n<!-- REPORT:START -->\nold\n<!-- REPORT:END -->\nafter\n',encoding='utf-8')
+            (project/'HANDOFF.md').write_text('notes before\n<!-- HISTORY:START -->\nold\n<!-- HISTORY:END -->\nnotes after\n',encoding='utf-8')
             cutoff = parse_time('2026-10-22T12:00:00+09:00')
             entry = dict(day='2026-10-22',sha256='c'*64)
             manifest = dict(since='2026-10-16',source_cutoff=iso_utc(cutoff),archives=[entry])
@@ -1321,6 +1336,18 @@ class ReportTests(unittest.TestCase):
                 text = (project/'README.md').read_text()
                 self.assertTrue(text.startswith('before\n'))
                 self.assertTrue(text.endswith('\nafter\n'))
+                handoff_text = (project/'HANDOFF.md').read_text()
+                self.assertTrue(handoff_text.startswith('notes before\n'))
+                self.assertTrue(handoff_text.endswith('\nnotes after\n'))
+                handoff_path = project/'HANDOFF.md'
+                valid_handoff = handoff_path.read_text()
+                handoff_path.write_text('unmarked user notes\n')
+                previous_report = (project/'README.md').read_bytes()
+                with self.assertRaises(ValueError):
+                    build_report(project)
+                self.assertEqual((project/'README.md').read_bytes(), previous_report)
+                self.assertEqual(handoff_path.read_text(), 'unmarked user notes\n')
+                handoff_path.write_text(valid_handoff)
                 (project/'analyze.py').write_text('# changed\n')
                 self.assertEqual(build_report(project)['rebuilt_days'],1)
                 entry['sha256']='e'*64
@@ -1383,6 +1410,7 @@ class ReportTests(unittest.TestCase):
             project = Path(directory)
             (project/'analyze.py').write_text('# fixture\n')
             (project/'README.md').write_text('<!-- REPORT:START --><!-- REPORT:END -->')
+            (project/'HANDOFF.md').write_text('<!-- HISTORY:START --><!-- HISTORY:END -->')
             cutoff = parse_time('2026-10-22T03:00:00+09:00')
             later = cutoff + timedelta(hours=3)
             ms = int(cutoff.timestamp()*1000)

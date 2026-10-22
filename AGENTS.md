@@ -1,5 +1,7 @@
 # 프로젝트 작업 지침
 
+운영 맥락·사용법·현재 게시 상태·장기 통계는 `HANDOFF.md`를 먼저 읽는다. README는 두 보고서 섹션만 보여 주는 진입점이며 운영 문서를 다시 넣지 않는다.
+
 ## 범위와 권한
 
 - Python 3.11+ 표준 라이브러리만 사용하고 최종 실행 파일은 `analyze.py` 하나로 유지한다. 웹 앱, 패키지 의존성, 별도 설정 프레임워크, 스케줄러를 추가하지 않는다.
@@ -63,7 +65,7 @@ Fast 비교는 차트 기간 내 두 tier가 모두 존재하는 동일 3시간 
 
 `data/monthly/YYYY-MM.json`은 날짜별 archive 해시와 daily 및 3시간 bucket 통계를 보존한다. 스키마/지표 버전이 다르면 실패하거나 명시적으로 rebuild한다. `analysis_sha256`은 `analyze.py` 전체 바이트 해시다. 코드가 바뀌면 과거 날짜도 다시 계산하며, 그대로면 archive 해시가 같은 날짜를 재사용한다. 제거된 index 참조를 집계에 남기지 않고 중복 합산하지 않는다. 최근 비교와 월별 집계가 같은 아카이브를 사용하면 실행 내에서 한 번만 읽는다.
 
-전체 월별 이력은 계속 보존하고 최근 차트 범위 때문에 과거 자료를 삭제하지 않는다. README에는 최근 12개월 일별 집계 기반 장기 추세를 둔다. 7일 차트의 합이나 버킷 평균으로 장기 지표를 대신하지 않는다.
+전체 월별 이력은 계속 보존하고 최근 차트 범위 때문에 과거 자료를 삭제하지 않는다. `HANDOFF.md`의 HISTORY 영역에 최근 12개월 일별 집계 기반 장기 추세를 둔다. 7일 차트의 합이나 버킷 평균으로 장기 지표를 대신하지 않는다.
 
 ## 차트와 문서 소유권
 
@@ -71,7 +73,7 @@ Fast 비교는 차트 기간 내 두 tier가 모두 존재하는 동일 3시간 
 
 `fast-comparison.svg`는 같은 기간의 동일 provider/model·겹치는 3시간 구간을 사용하여 일반(default)과 Fast(priority)의 생성 TPS·대기 포함 TPS를 나란한 막대로 비교한다. 기존 Fast 상세표와 같은 모집단을 사용하고 두 패널의 TPS 축은 0부터 동일한 범위로 고정한다. 각 tier의 응답 수·세션 수, 겹친 구간 수, 관측 변화율과 표본 부족 경고를 함께 표시한다. 한쪽 tier가 없으면 비교 불가 상태를 표시하고, TTFT가 없으면 생성 TPS를 0으로 그리지 않는다. 생성 TPS의 응답 집합은 `generation_n`으로 따로 구분되며 표시된 전체 응답 수는 E2E 유효 모집단이다. 상세 TTFT·토큰 길이 표는 README의 접힌 영역에 보존한다.
 
-README의 생성 영역은 정확히 한 쌍의 `<!-- REPORT:START -->` 및 `<!-- REPORT:END -->` 사이뿐이다. 바깥 사용자의 설명을 보존한다. cutoff·coverage·포함/제외 수·모델/tier·Fast 비교·차트 링크·장기 추세를 생성하되 실제 데이터 없는 측정 결과를 꾸며 쓰지 않는다.
+README는 `Latest 7 KST dates`와 `Fast comparison · matched 3-hour buckets` 두 보고서 섹션만 유지한다. 그래프·기간·표본·해당 상세표는 유지하고, 소개·사용법·운영 안내·장기 추세·일반 해석 메모는 `HANDOFF.md`에 둔다. `report`는 README의 `<!-- REPORT:START -->`/`<!-- REPORT:END -->`와 HANDOFF의 `<!-- HISTORY:START -->`/`<!-- HISTORY:END -->` 영역만 갱신한다. 각각 정확히 한 쌍이어야 하며 바깥의 사용자 메모를 보존한다. 실제 데이터 없는 측정 결과를 꾸며 쓰지 않는다.
 
 ## Actions 신뢰 경계
 
@@ -79,6 +81,6 @@ PR job은 `contents: read`와 자격 증명을 남기지 않는 checkout으로 `
 
 생성 job은 신뢰된 main의 push 또는 main에서 요청한 workflow_dispatch에만 `contents: write`를 부여한다. `GITHUB_TOKEN`을 사용하고 `gh`가 설치된 Ubuntu runner를 전제로 한다. 재사용 cache 범위는 `.cache/archives`만이며 collector DB나 소스 로그를 포함하지 않는다. `report --repo "$GITHUB_REPOSITORY"`는 매번 외부 manifest를 기준으로 asset을 검증한다.
 
-concurrency로 같은 ref의 실행을 직렬화한다. 생성 직전 remote main tip이 시작 SHA와 같은지 확인하고 다르면 중단한다. 이후 경쟁은 일반 non-force push가 거부한다. pull/rebase/force 또는 새 입력 덮어쓰기를 하지 않는다. 변경된 `README.md`, `report.svg`, `fast-comparison.svg`, `data/monthly`만 stage/commit하며 index·코드·원자료는 자동 커밋하지 않는다. 출력 전용 커밋은 입력 paths에 걸리지 않고 GITHUB_TOKEN의 재트리거 제한도 있으므로 자기 반복하지 않는다.
+concurrency로 같은 ref의 실행을 직렬화한다. 생성 직전 remote main tip이 시작 SHA와 같은지 확인하고 다르면 중단한다. 이후 경쟁은 일반 non-force push가 거부한다. pull/rebase/force 또는 새 입력 덮어쓰기를 하지 않는다. 변경된 `README.md`, `HANDOFF.md`, `report.svg`, `fast-comparison.svg`, `data/monthly`만 stage/commit하며 index·코드·원자료는 자동 커밋하지 않는다. 출력 전용 커밋은 입력 paths에 걸리지 않고 GITHUB_TOKEN의 재트리거 제한도 있으므로 자기 반복하지 않는다.
 
 저장소 설정에서 Actions 쓰기 및 main의 bot push가 허용되어야 한다. 브랜치 보호가 거부하면 정책을 우회하지 않고 실패를 보고한다. cache는 최적화일 뿐, Release와 index를 복구 가능한 진실의 원천으로 유지한다.

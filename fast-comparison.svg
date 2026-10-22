@@ -4,7 +4,7 @@
 <style>:root{--bg:#ffffff;--text:#172033;--muted:#667085;--grid:#e4e8ed;--axis:#98a2b3;--font:ui-sans-serif,system-ui,-apple-system,sans-serif;--series0:#087c92;--series1:#8b6227;--series2:#087f5b;--series3:#6d3be8;--series4:#b42363;--series5:#a85d08;--series6:#2458c4;--series7:#326f61}@media(prefers-color-scheme:dark){:root{--bg:#0b1016;--text:#e8edf2;--muted:#96a2af;--grid:#2b333d;--axis:#596574;--series0:#24d5f5;--series1:#d8c090;--series2:#35d996;--series3:#af92ff;--series4:#f28ab9;--series5:#edb76c;--series6:#88aaff;--series7:#84d1c0}}text{font-family:var(--font);fill:var(--text);font-variant-numeric:tabular-nums}.muted{fill:var(--muted)}.grid{stroke:var(--grid);stroke-width:0.8}.line{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}</style>
 <rect width="1000" height="640" fill="var(--bg)"/>
 <text x="68" y="36" font-size="26" font-weight="650">일반 vs Fast</text>
-<text x="68" y="62" font-size="13" class="muted">10.17 — 10.23 · 2026-10-23 03:40 KST 기준</text>
+<text x="68" y="62" font-size="13" class="muted">10.17 — 10.23 · 2026-10-23 04:22 KST 기준</text>
 <rect x="68" y="90" width="18" height="9" rx="3" fill="var(--muted)" fill-opacity=".6"/>
 <text x="94" y="100" font-size="13">일반 · default</text>
 <rect x="244" y="90" width="18" height="9" rx="3" fill="var(--series0)"/>
@@ -31,18 +31,18 @@
 <text x="915.00" y="163" text-anchor="middle" font-size="12" class="muted">120</text>
 <text x="68" y="202" font-size="16" font-weight="650">gpt-6-astra<title>openai-codex / gpt-6-astra</title></text>
 <text x="68" y="220" font-size="11" class="muted">openai-codex</text>
-<text x="68" y="242" font-size="12" class="muted">일반 1,778건 · 17세션</text>
-<rect x="350" y="230" width="54.376" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="default" data-metric="generation_tps" data-value="26.63330698773247"><title>gpt-6-astra · 일반: 26.63 TPS</title></rect>
-<text x="635" y="242" text-anchor="end" font-size="14" font-weight="600">26.6</text>
-<rect x="700" y="230" width="40.661" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="default" data-metric="e2e_tps" data-value="22.694734529350026"><title>gpt-6-astra · 일반: 22.69 TPS</title></rect>
-<text x="960" y="242" text-anchor="end" font-size="14" font-weight="600">22.7</text>
-<text x="68" y="266" font-size="12" class="muted">Fast 472건 · 4세션</text>
-<rect x="350" y="254" width="69.002" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="priority" data-metric="generation_tps" data-value="33.79710756124296"><title>gpt-6-astra · Fast: 33.80 TPS</title></rect>
-<text x="635" y="266" text-anchor="end" font-size="14" font-weight="600">33.8</text>
-<rect x="700" y="254" width="54.100" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="priority" data-metric="e2e_tps" data-value="30.195573015032007"><title>gpt-6-astra · Fast: 30.20 TPS</title></rect>
-<text x="960" y="266" text-anchor="end" font-size="14" font-weight="600">30.2</text>
-<text x="350" y="202" font-size="12" class="muted">관측 차이 +26.9%</text>
-<text x="700" y="202" font-size="12" class="muted">관측 차이 +33.1%</text>
+<text x="68" y="242" font-size="12" class="muted">일반 1,965건 · 17세션</text>
+<rect x="350" y="230" width="55.270" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="default" data-metric="generation_tps" data-value="27.070830575698146"><title>gpt-6-astra · 일반: 27.07 TPS</title></rect>
+<text x="635" y="242" text-anchor="end" font-size="14" font-weight="600">27.1</text>
+<rect x="700" y="230" width="41.123" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="default" data-metric="e2e_tps" data-value="22.952419823049603"><title>gpt-6-astra · 일반: 22.95 TPS</title></rect>
+<text x="960" y="242" text-anchor="end" font-size="14" font-weight="600">23.0</text>
+<text x="68" y="266" font-size="12" class="muted">Fast 522건 · 4세션</text>
+<rect x="350" y="254" width="70.312" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="priority" data-metric="generation_tps" data-value="34.43850779375626"><title>gpt-6-astra · Fast: 34.44 TPS</title></rect>
+<text x="635" y="266" text-anchor="end" font-size="14" font-weight="600">34.4</text>
+<rect x="700" y="254" width="55.273" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6-astra" data-tier="priority" data-metric="e2e_tps" data-value="30.850143105294542"><title>gpt-6-astra · Fast: 30.85 TPS</title></rect>
+<text x="960" y="266" text-anchor="end" font-size="14" font-weight="600">30.9</text>
+<text x="350" y="202" font-size="12" class="muted">관측 차이 +27.2%</text>
+<text x="700" y="202" font-size="12" class="muted">관측 차이 +34.4%</text>
 <text x="68" y="294" font-size="12" style="fill:var(--series5)">표본 주의 · 겹친 3시간 구간 2개</text>
 <text x="68" y="328" font-size="16" font-weight="650">gpt-6-luna<title>openai-codex / gpt-6-luna</title></text>
 <text x="68" y="346" font-size="11" class="muted">openai-codex</text>
@@ -61,18 +61,18 @@
 <text x="68" y="420" font-size="12" style="fill:var(--muted)">겹친 3시간 구간 1개</text>
 <text x="68" y="454" font-size="16" font-weight="650">gpt-6.1-sol<title>openai-codex / gpt-6.1-sol</title></text>
 <text x="68" y="472" font-size="11" class="muted">openai-codex</text>
-<text x="68" y="494" font-size="12" class="muted">일반 4,215건 · 143세션</text>
-<rect x="350" y="482" width="73.157" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="default" data-metric="generation_tps" data-value="35.83209364834356"><title>gpt-6.1-sol · 일반: 35.83 TPS</title></rect>
+<text x="68" y="494" font-size="12" class="muted">일반 4,659건 · 154세션</text>
+<rect x="350" y="482" width="73.132" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="default" data-metric="generation_tps" data-value="35.819632117437656"><title>gpt-6.1-sol · 일반: 35.82 TPS</title></rect>
 <text x="635" y="494" text-anchor="end" font-size="14" font-weight="600">35.8</text>
-<rect x="700" y="482" width="52.939" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="default" data-metric="e2e_tps" data-value="29.547546541419536"><title>gpt-6.1-sol · 일반: 29.55 TPS</title></rect>
-<text x="960" y="494" text-anchor="end" font-size="14" font-weight="600">29.5</text>
-<text x="68" y="518" font-size="12" class="muted">Fast 1,197건 · 34세션</text>
-<rect x="350" y="506" width="107.731" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="priority" data-metric="generation_tps" data-value="52.76626058066391"><title>gpt-6.1-sol · Fast: 52.77 TPS</title></rect>
-<text x="635" y="518" text-anchor="end" font-size="14" font-weight="600">52.8</text>
-<rect x="700" y="506" width="75.742" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="priority" data-metric="e2e_tps" data-value="42.274653349008666"><title>gpt-6.1-sol · Fast: 42.27 TPS</title></rect>
-<text x="960" y="518" text-anchor="end" font-size="14" font-weight="600">42.3</text>
-<text x="350" y="454" font-size="12" class="muted">관측 차이 +47.3%</text>
-<text x="700" y="454" font-size="12" class="muted">관측 차이 +43.1%</text>
+<rect x="700" y="482" width="53.162" height="12" rx="4" fill="var(--muted)" fill-opacity=".6" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="default" data-metric="e2e_tps" data-value="29.671581308452563"><title>gpt-6.1-sol · 일반: 29.67 TPS</title></rect>
+<text x="960" y="494" text-anchor="end" font-size="14" font-weight="600">29.7</text>
+<text x="68" y="518" font-size="12" class="muted">Fast 1,250건 · 36세션</text>
+<rect x="350" y="506" width="108.234" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="priority" data-metric="generation_tps" data-value="53.01250895950695"><title>gpt-6.1-sol · Fast: 53.01 TPS</title></rect>
+<text x="635" y="518" text-anchor="end" font-size="14" font-weight="600">53.0</text>
+<rect x="700" y="506" width="75.961" height="12" rx="4" fill="var(--series0)" fill-opacity="1" data-provider="openai-codex" data-model="gpt-6.1-sol" data-tier="priority" data-metric="e2e_tps" data-value="42.396727579337124"><title>gpt-6.1-sol · Fast: 42.40 TPS</title></rect>
+<text x="960" y="518" text-anchor="end" font-size="14" font-weight="600">42.4</text>
+<text x="350" y="454" font-size="12" class="muted">관측 차이 +48.0%</text>
+<text x="700" y="454" font-size="12" class="muted">관측 차이 +42.9%</text>
 <text x="68" y="546" font-size="12" style="fill:var(--muted)">겹친 3시간 구간 2개</text>
 <text x="68" y="598" font-size="12" class="muted">같은 모델·겹치는 시간 구간만 비교 · 입력 길이·작업·세션 차이는 통제하지 않은 관찰 자료입니다.</text>
 <text x="68" y="620" font-size="12" class="muted">표본 주의: 어느 한쪽이 30건 미만 또는 5세션 미만 · 세션 수는 같은 모집단 안에서 중복 제거합니다.</text>
