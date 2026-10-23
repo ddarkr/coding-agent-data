@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="621" viewBox="0 0 1000 621" style="max-width:100%;height:auto" role="img" aria-labelledby="title desc">
-<title id="title">Coding agent generation speed and response activity</title>
-<desc id="desc">Three-hour KST buckets. Gaps mean no valid measurement, not zero speed. Curves are observational.</desc>
+<title id="title">Coding agent generation speed by model and service tier</title>
+<desc id="desc">Three-hour KST buckets, separated by provider, model and service tier. Solid lines are default, dashed lines priority, dotted lines other tiers. Gaps mean no valid measurement. End labels show each series last valid observation.</desc>
 <defs>
   <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
     <stop stop-color="var(--series0)" stop-opacity=".25"/>
@@ -9,163 +9,214 @@
 </defs>
 <style>:root{--bg:#ffffff;--text:#172033;--muted:#667085;--grid:#e4e8ed;--axis:#98a2b3;--font:ui-sans-serif,system-ui,-apple-system,sans-serif;--series0:#087c92;--series1:#8b6227;--series2:#087f5b;--series3:#6d3be8;--series4:#b42363;--series5:#a85d08;--series6:#2458c4;--series7:#326f61}@media(prefers-color-scheme:dark){:root{--bg:#0b1016;--text:#e8edf2;--muted:#96a2af;--grid:#2b333d;--axis:#596574;--series0:#24d5f5;--series1:#d8c090;--series2:#35d996;--series3:#af92ff;--series4:#f28ab9;--series5:#edb76c;--series6:#88aaff;--series7:#84d1c0}}text{font-family:var(--font);fill:var(--text);font-variant-numeric:tabular-nums}.muted{fill:var(--muted)}.grid{stroke:var(--grid);stroke-width:0.8}.line{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}</style>
 <rect width="1000" height="621" fill="var(--bg)"/>
-<text x="68" y="36" font-size="26" font-weight="650">모델별 처리 속도</text>
-<text x="68" y="62" font-size="13" class="muted">10.17 — 10.23 · 3시간 집계 · 2026-10-23 04:22 KST 기준</text>
+<text x="68" y="36" font-size="26" font-weight="650">모델별 처리 속도 · 일반 / Fast</text>
+<text x="68" y="62" font-size="13" class="muted">10.17 — 10.23 · 3시간 집계 · 2026-10-23 22:52 KST 기준</text>
 <text x="68" y="94" font-size="15" font-weight="600">생성 TPS <tspan font-size="12" font-weight="400" class="muted">· 첫 토큰 대기 제외</tspan></text>
-<path class="grid" d="M68,350.00 H770"/>
+<path d="M410,90 H440" class="line" stroke="var(--text)"/>
+<text x="448" y="94" font-size="12" class="muted">일반 · default</text>
+<path d="M575,90 H605" class="line" stroke="var(--text)" stroke-dasharray="8,5"/>
+<text x="613" y="94" font-size="12" class="muted">Fast · priority</text>
+<path class="grid" d="M68,350.00 H730"/>
 <text x="56" y="354.00" text-anchor="end" font-size="13" class="muted">0</text>
-<path class="grid" d="M68,290.00 H770"/>
+<path class="grid" d="M68,290.00 H730"/>
 <text x="56" y="294.00" text-anchor="end" font-size="13" class="muted">40</text>
-<path class="grid" d="M68,230.00 H770"/>
+<path class="grid" d="M68,230.00 H730"/>
 <text x="56" y="234.00" text-anchor="end" font-size="13" class="muted">80</text>
-<path class="grid" d="M68,170.00 H770"/>
+<path class="grid" d="M68,170.00 H730"/>
 <text x="56" y="174.00" text-anchor="end" font-size="13" class="muted">120</text>
-<path class="grid" d="M68,110.00 H770"/>
+<path class="grid" d="M68,110.00 H730"/>
 <text x="56" y="114.00" text-anchor="end" font-size="13" class="muted">160</text>
-<path class="line" stroke="var(--series2)" d="M75.02,295.80 C79.70,296.49 84.38,297.22 89.06,297.85 C93.74,298.48 98.42,299.01 103.10,299.58"/>
-<circle cx="75.02" cy="295.80" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 36.13 TPS</title></circle>
-<circle cx="89.06" cy="297.85" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 34.77 TPS</title></circle>
-<circle cx="103.10" cy="299.58" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 33.61 TPS</title></circle>
-<path class="line" stroke="var(--series2)" d="M131.18,280.70 C135.86,284.20 140.54,288.75 145.22,291.19 C149.90,293.62 154.58,296.79 159.26,296.79 C163.94,296.79 168.62,294.79 173.30,294.79 C177.98,294.79 182.66,298.58 187.34,298.58 C192.02,298.58 196.70,290.45 201.38,290.45 C206.06,290.45 210.74,294.79 215.42,296.96"/>
-<circle cx="131.18" cy="280.70" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 46.20 TPS</title></circle>
-<circle cx="145.22" cy="291.19" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 39.21 TPS</title></circle>
-<circle cx="159.26" cy="296.79" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 35.47 TPS</title></circle>
-<circle cx="173.30" cy="294.79" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 36.80 TPS</title></circle>
-<circle cx="187.34" cy="298.58" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 34.28 TPS</title></circle>
-<circle cx="201.38" cy="290.45" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 39.70 TPS</title></circle>
-<circle cx="215.42" cy="296.96" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 35.36 TPS</title></circle>
-<path class="line" stroke="var(--series2)" d="M706.82,314.68 C711.50,312.94 716.18,309.44 720.86,309.44 C725.54,309.44 730.22,311.99 734.90,311.99 C739.58,311.99 744.26,309.62 748.94,307.83 C753.62,306.04 758.30,302.78 762.98,300.25"/>
-<circle cx="706.82" cy="314.68" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 23.54 TPS</title></circle>
-<circle cx="720.86" cy="309.44" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 27.04 TPS</title></circle>
-<circle cx="734.90" cy="311.99" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 25.34 TPS</title></circle>
-<circle cx="748.94" cy="307.83" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 28.11 TPS</title></circle>
-<circle cx="762.98" cy="300.25" r="2.5" fill="var(--series2)"><title>openai-codex / gpt-6-astra: 33.17 TPS</title></circle>
-<circle cx="762.98" cy="300.25" r="4" fill="var(--series2)"/>
-<path class="line" stroke="var(--series1)" d="M75.02,217.07 C79.70,221.60 84.38,226.13 89.06,230.66"/>
-<circle cx="75.02" cy="217.07" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 88.62 TPS</title></circle>
-<circle cx="89.06" cy="230.66" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 79.56 TPS</title></circle>
-<path class="line" stroke="var(--series1)" d="M201.38,210.13"/>
-<circle cx="201.38" cy="210.13" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 93.25 TPS</title></circle>
-<path class="line" stroke="var(--series1)" d="M285.62,227.32"/>
-<circle cx="285.62" cy="227.32" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 81.79 TPS</title></circle>
-<path class="line" stroke="var(--series1)" d="M355.82,251.50"/>
-<circle cx="355.82" cy="251.50" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 65.67 TPS</title></circle>
-<path class="line" stroke="var(--series1)" d="M383.90,199.90 C388.58,204.95 393.26,215.06 397.94,215.06 C402.62,215.06 407.30,213.39 411.98,211.09 C416.66,208.79 421.34,192.17 426.02,184.82 C430.70,177.47 435.38,165.82 440.06,165.82 C444.74,165.82 449.42,177.50 454.10,182.53 C458.78,187.57 463.46,193.44 468.14,196.30 C472.82,199.17 477.50,202.56 482.18,202.56 C486.86,202.56 491.54,174.98 496.22,174.98 C500.90,174.98 505.58,205.45 510.26,205.45 C514.94,205.45 519.62,179.43 524.30,179.43 C528.98,179.43 533.66,200.58 538.34,200.58 C543.02,200.58 547.70,181.16 552.38,181.16 C557.06,181.16 561.74,182.96 566.42,184.88 C571.10,186.80 575.78,197.63 580.46,197.63 C585.14,197.63 589.82,192.29 594.50,192.29 C599.18,192.29 603.86,248.39 608.54,248.39 C613.22,248.39 617.90,228.84 622.58,228.84 C627.26,228.84 631.94,236.91 636.62,236.91 C641.30,236.91 645.98,215.71 650.66,205.12"/>
-<circle cx="383.90" cy="199.90" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 100.07 TPS</title></circle>
-<circle cx="397.94" cy="215.06" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 89.96 TPS</title></circle>
-<circle cx="411.98" cy="211.09" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 92.60 TPS</title></circle>
-<circle cx="426.02" cy="184.82" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 110.12 TPS</title></circle>
-<circle cx="440.06" cy="165.82" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 122.79 TPS</title></circle>
-<circle cx="454.10" cy="182.53" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 111.65 TPS</title></circle>
-<circle cx="468.14" cy="196.30" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 102.46 TPS</title></circle>
-<circle cx="482.18" cy="202.56" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 98.30 TPS</title></circle>
-<circle cx="496.22" cy="174.98" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 116.68 TPS</title></circle>
-<circle cx="510.26" cy="205.45" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 96.37 TPS</title></circle>
-<circle cx="524.30" cy="179.43" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 113.71 TPS</title></circle>
-<circle cx="538.34" cy="200.58" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 99.61 TPS</title></circle>
-<circle cx="552.38" cy="181.16" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 112.56 TPS</title></circle>
-<circle cx="566.42" cy="184.88" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 110.08 TPS</title></circle>
-<circle cx="580.46" cy="197.63" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 101.58 TPS</title></circle>
-<circle cx="594.50" cy="192.29" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 105.14 TPS</title></circle>
-<circle cx="608.54" cy="248.39" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 67.74 TPS</title></circle>
-<circle cx="622.58" cy="228.84" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 80.77 TPS</title></circle>
-<circle cx="636.62" cy="236.91" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 75.40 TPS</title></circle>
-<circle cx="650.66" cy="205.12" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 96.59 TPS</title></circle>
-<path class="line" stroke="var(--series1)" d="M678.74,186.40 C683.42,186.71 688.10,186.72 692.78,187.31 C697.46,187.91 702.14,229.10 706.82,229.10 C711.50,229.10 716.18,181.10 720.86,181.10 C725.54,181.10 730.22,200.48 734.90,200.48 C739.58,200.48 744.26,194.19 748.94,194.19 C753.62,194.19 758.30,200.50 762.98,203.65"/>
-<circle cx="678.74" cy="186.40" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 109.06 TPS</title></circle>
-<circle cx="692.78" cy="187.31" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 108.46 TPS</title></circle>
-<circle cx="706.82" cy="229.10" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 80.60 TPS</title></circle>
-<circle cx="720.86" cy="181.10" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 112.60 TPS</title></circle>
-<circle cx="734.90" cy="200.48" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 99.68 TPS</title></circle>
-<circle cx="748.94" cy="194.19" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 103.87 TPS</title></circle>
-<circle cx="762.98" cy="203.65" r="2.5" fill="var(--series1)"><title>openai-codex / gpt-6-luna: 97.56 TPS</title></circle>
-<circle cx="762.98" cy="203.65" r="4" fill="var(--series1)"/>
-<path class="line" stroke="var(--series0)" d="M75.02,271.65 C79.70,271.43 84.38,270.99 89.06,270.99 C93.74,270.99 98.42,279.43 103.10,283.65"/>
-<circle cx="75.02" cy="271.65" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 52.23 TPS</title></circle>
-<circle cx="89.06" cy="270.99" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 52.67 TPS</title></circle>
-<circle cx="103.10" cy="283.65" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 44.23 TPS</title></circle>
-<path class="line" stroke="var(--series0)" d="M131.18,249.03 C135.86,248.32 140.54,246.90 145.22,246.90 C149.90,246.90 154.58,246.96 159.26,247.09 C163.94,247.21 168.62,267.20 173.30,272.85 C177.98,278.50 182.66,285.49 187.34,285.49 C192.02,285.49 196.70,253.25 201.38,244.01 C206.06,234.78 210.74,230.15 215.42,223.21"/>
-<circle cx="131.18" cy="249.03" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 67.31 TPS</title></circle>
-<circle cx="145.22" cy="246.90" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 68.73 TPS</title></circle>
-<circle cx="159.26" cy="247.09" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 68.61 TPS</title></circle>
-<circle cx="173.30" cy="272.85" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 51.43 TPS</title></circle>
-<circle cx="187.34" cy="285.49" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 43.01 TPS</title></circle>
-<circle cx="201.38" cy="244.01" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 70.66 TPS</title></circle>
-<circle cx="215.42" cy="223.21" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 84.52 TPS</title></circle>
-<path class="line" stroke="var(--series0)" d="M285.62,288.30"/>
-<circle cx="285.62" cy="288.30" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 41.13 TPS</title></circle>
-<path class="line" stroke="var(--series0)" d="M327.74,240.51 C332.42,245.33 337.10,254.97 341.78,254.97 C346.46,254.97 351.14,253.33 355.82,253.33 C360.50,253.33 365.18,273.62 369.86,273.62 C374.54,273.62 379.22,273.18 383.90,272.82 C388.58,272.46 393.26,271.16 397.94,271.16 C402.62,271.16 407.30,274.37 411.98,275.72 C416.66,277.06 421.34,279.34 426.02,279.34 C430.70,279.34 435.38,272.88 440.06,272.88 C444.74,272.88 449.42,274.96 454.10,276.61 C458.78,278.27 463.46,281.55 468.14,284.02 C472.82,286.49 477.50,291.45 482.18,291.45 C486.86,291.45 491.54,286.54 496.22,286.54 C500.90,286.54 505.58,300.11 510.26,300.11 C514.94,300.11 519.62,292.84 524.30,292.02 C528.98,291.19 533.66,291.27 538.34,290.55 C543.02,289.84 547.70,286.53 552.38,286.53 C557.06,286.53 561.74,290.31 566.42,291.05 C571.10,291.79 575.78,291.68 580.46,292.51 C585.14,293.35 589.82,301.01 594.50,301.01 C599.18,301.01 603.86,297.24 608.54,297.24 C613.22,297.24 617.90,299.62 622.58,299.62 C627.26,299.62 631.94,299.59 636.62,299.53 C641.30,299.47 645.98,286.52 650.66,286.52 C655.34,286.52 660.02,286.66 664.70,286.92 C669.38,287.17 674.06,294.75 678.74,295.84 C683.42,296.93 688.10,296.83 692.78,297.84 C697.46,298.85 702.14,304.10 706.82,304.10 C711.50,304.10 716.18,302.61 720.86,302.40 C725.54,302.20 730.22,302.27 734.90,302.03 C739.58,301.79 744.26,291.69 748.94,291.69 C753.62,291.69 758.30,295.04 762.98,296.72"/>
-<circle cx="327.74" cy="240.51" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 73.00 TPS</title></circle>
-<circle cx="341.78" cy="254.97" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 63.35 TPS</title></circle>
-<circle cx="355.82" cy="253.33" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 64.44 TPS</title></circle>
-<circle cx="369.86" cy="273.62" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 50.92 TPS</title></circle>
-<circle cx="383.90" cy="272.82" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 51.45 TPS</title></circle>
-<circle cx="397.94" cy="271.16" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 52.56 TPS</title></circle>
-<circle cx="411.98" cy="275.72" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 49.52 TPS</title></circle>
-<circle cx="426.02" cy="279.34" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 47.11 TPS</title></circle>
-<circle cx="440.06" cy="272.88" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 51.41 TPS</title></circle>
-<circle cx="454.10" cy="276.61" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 48.92 TPS</title></circle>
-<circle cx="468.14" cy="284.02" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 43.99 TPS</title></circle>
-<circle cx="482.18" cy="291.45" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 39.03 TPS</title></circle>
-<circle cx="496.22" cy="286.54" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 42.31 TPS</title></circle>
-<circle cx="510.26" cy="300.11" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 33.26 TPS</title></circle>
-<circle cx="524.30" cy="292.02" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 38.66 TPS</title></circle>
-<circle cx="538.34" cy="290.55" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 39.63 TPS</title></circle>
-<circle cx="552.38" cy="286.53" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 42.31 TPS</title></circle>
-<circle cx="566.42" cy="291.05" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 39.30 TPS</title></circle>
-<circle cx="580.46" cy="292.51" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 38.32 TPS</title></circle>
-<circle cx="594.50" cy="301.01" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 32.66 TPS</title></circle>
-<circle cx="608.54" cy="297.24" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 35.17 TPS</title></circle>
-<circle cx="622.58" cy="299.62" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 33.59 TPS</title></circle>
-<circle cx="636.62" cy="299.53" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 33.65 TPS</title></circle>
-<circle cx="650.66" cy="286.52" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 42.32 TPS</title></circle>
-<circle cx="664.70" cy="286.92" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 42.06 TPS</title></circle>
-<circle cx="678.74" cy="295.84" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 36.11 TPS</title></circle>
-<circle cx="692.78" cy="297.84" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 34.77 TPS</title></circle>
-<circle cx="706.82" cy="304.10" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 30.60 TPS</title></circle>
-<circle cx="720.86" cy="302.40" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 31.73 TPS</title></circle>
-<circle cx="734.90" cy="302.03" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 31.98 TPS</title></circle>
-<circle cx="748.94" cy="291.69" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 38.87 TPS</title></circle>
-<circle cx="762.98" cy="296.72" r="2.5" fill="var(--series0)"><title>openai-codex / gpt-6.1-sol: 35.52 TPS</title></circle>
-<circle cx="762.98" cy="296.72" r="4" fill="var(--series0)"/>
-<path d="M762.98,203.65 H780" fill="none" stroke="var(--series1)" stroke-opacity=".5" stroke-width="1.2"/>
-<text x="788" y="208.65" font-size="14" font-weight="600" style="fill:var(--series1)">gpt-6-luna<title>openai-codex / gpt-6-luna</title></text>
-<text x="970" y="208.65" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series1)">97.6</text>
-<path d="M762.98,296.72 H780" fill="none" stroke="var(--series0)" stroke-opacity=".5" stroke-width="1.2"/>
-<text x="788" y="301.72" font-size="14" font-weight="600" style="fill:var(--series0)">gpt-6.1-sol<title>openai-codex / gpt-6.1-sol</title></text>
-<text x="970" y="301.72" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series0)">35.5</text>
-<path d="M762.98,300.25 C771.49,300.25 771.49,318.72 780,318.72" fill="none" stroke="var(--series2)" stroke-opacity=".5" stroke-width="1.2"/>
-<text x="788" y="323.72" font-size="14" font-weight="600" style="fill:var(--series2)">gpt-6-astra<title>openai-codex / gpt-6-astra</title></text>
-<text x="970" y="323.72" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series2)">33.2</text>
+<path class="line" data-tier="default" stroke="var(--series2)" stroke-dasharray="" d="M73.91,295.80 C77.85,296.49 81.79,297.22 85.73,297.85 C89.67,298.48 93.61,299.01 97.55,299.58"/>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="36.131547" cx="73.91" cy="295.80" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 36.13 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="34.76659" cx="85.73" cy="297.85" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 34.77 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="33.610588" cx="97.55" cy="299.58" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 33.61 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series2)" stroke-dasharray="" d="M121.20,280.70 C125.14,284.20 129.08,288.75 133.02,291.19 C136.96,293.62 140.90,296.79 144.84,296.79 C148.78,296.79 152.72,294.79 156.66,294.79 C160.60,294.79 164.54,298.58 168.48,298.58 C172.42,298.58 176.36,290.45 180.30,290.45 C184.24,290.45 188.18,294.79 192.12,296.96"/>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="46.200137" cx="121.20" cy="280.70" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 46.20 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="39.208589" cx="133.02" cy="291.19" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 39.21 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="35.47244" cx="144.84" cy="296.79" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 35.47 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="36.80427" cx="156.66" cy="294.79" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 36.80 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="34.277014" cx="168.48" cy="298.58" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 34.28 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="39.696886" cx="180.30" cy="290.45" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 39.70 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="35.360813" cx="192.12" cy="296.96" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 35.36 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series2)" stroke-dasharray="" d="M605.88,314.68 C609.82,312.94 613.76,309.44 617.70,309.44 C621.64,309.44 625.58,311.99 629.52,311.99 C633.46,311.99 637.40,311.07 641.34,309.93 C645.28,308.79 649.22,300.77 653.16,299.88 C657.10,298.98 661.04,298.84 664.98,298.33"/>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="23.543427" cx="605.88" cy="314.68" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 23.54 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="27.039012" cx="617.70" cy="309.44" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 27.04 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="25.341691" cx="629.52" cy="311.99" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 25.34 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="26.715614" cx="641.34" cy="309.93" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 26.72 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="33.415316" cx="653.16" cy="299.88" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 33.42 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="34.449088" cx="664.98" cy="298.33" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 34.45 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series2)" stroke-dasharray="" d="M700.45,312.72 C704.39,308.91 708.33,301.30 712.27,301.30 C716.21,301.30 720.15,307.44 724.09,310.51"/>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="24.8547" cx="700.45" cy="312.72" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 24.85 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="32.469142" cx="712.27" cy="301.30" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 32.47 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="default" data-value="26.325178" cx="724.09" cy="310.51" r="2.5" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / default: 26.33 TPS</title></circle>
+<circle cx="724.09" cy="310.51" r="4" fill="var(--series2)" stroke="var(--series2)" stroke-width="1.5"/>
+<path class="line" data-tier="priority" stroke="var(--series2)" stroke-dasharray="8,5" d="M641.34,299.86 C645.28,298.17 649.22,297.82 653.16,294.78 C657.10,291.73 661.04,264.68 664.98,249.64"/>
+<circle data-model="gpt-6-astra" data-tier="priority" data-value="33.425751" cx="641.34" cy="299.86" r="2.5" fill="var(--bg)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / priority: 33.43 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="priority" data-value="36.81564" cx="653.16" cy="294.78" r="2.5" fill="var(--bg)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / priority: 36.82 TPS</title></circle>
+<circle data-model="gpt-6-astra" data-tier="priority" data-value="66.907206" cx="664.98" cy="249.64" r="2.5" fill="var(--bg)" stroke="var(--series2)" stroke-width="1.5"><title>openai-codex / gpt-6-astra / priority: 66.91 TPS</title></circle>
+<circle cx="664.98" cy="249.64" r="4" fill="var(--bg)" stroke="var(--series2)" stroke-width="1.5"/>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M73.91,217.07 C77.85,221.60 81.79,226.13 85.73,230.66"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="88.617086" cx="73.91" cy="217.07" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 88.62 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="79.560452" cx="85.73" cy="230.66" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 79.56 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M180.30,210.13"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="93.248321" cx="180.30" cy="210.13" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 93.25 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M251.23,227.32"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="81.787948" cx="251.23" cy="227.32" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 81.79 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M310.34,251.50"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="65.667025" cx="310.34" cy="251.50" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 65.67 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M333.98,199.90 C337.92,204.95 341.86,215.06 345.80,215.06 C349.74,215.06 353.68,213.39 357.62,211.09 C361.57,208.79 365.51,192.17 369.45,184.82 C373.39,177.47 377.33,165.82 381.27,165.82 C385.21,165.82 389.15,177.50 393.09,182.53 C397.03,187.57 400.97,193.44 404.91,196.30 C408.85,199.17 412.79,202.56 416.73,202.56 C420.67,202.56 424.61,174.98 428.55,174.98 C432.49,174.98 436.43,205.45 440.38,205.45 C444.32,205.45 448.26,179.43 452.20,179.43 C456.14,179.43 460.08,200.58 464.02,200.58 C467.96,200.58 471.90,181.16 475.84,181.16 C479.78,181.16 483.72,182.96 487.66,184.88 C491.60,186.80 495.54,197.63 499.48,197.63 C503.42,197.63 507.36,192.29 511.30,192.29 C515.24,192.29 519.18,248.39 523.12,248.39 C527.07,248.39 531.01,228.84 534.95,228.84 C538.89,228.84 542.83,236.91 546.77,236.91 C550.71,236.91 554.65,215.71 558.59,205.12"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="100.06869" cx="333.98" cy="199.90" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 100.07 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="89.957076" cx="345.80" cy="215.06" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 89.96 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="92.604214" cx="357.62" cy="211.09" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 92.60 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="110.11829" cx="369.45" cy="184.82" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 110.12 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="122.7859" cx="381.27" cy="165.82" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 122.79 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="111.64522" cx="393.09" cy="182.53" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 111.65 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="102.46488" cx="404.91" cy="196.30" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 102.46 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="98.29666" cx="416.73" cy="202.56" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 98.30 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="116.68089" cx="428.55" cy="174.98" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 116.68 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="96.368084" cx="440.38" cy="205.45" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 96.37 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="113.71235" cx="452.20" cy="179.43" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 113.71 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="99.610571" cx="464.02" cy="200.58" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 99.61 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="112.55846" cx="475.84" cy="181.16" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 112.56 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="110.07932" cx="487.66" cy="184.88" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 110.08 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="101.58028" cx="499.48" cy="197.63" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 101.58 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="105.1398" cx="511.30" cy="192.29" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 105.14 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="67.737656" cx="523.12" cy="248.39" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 67.74 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="80.770616" cx="534.95" cy="228.84" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 80.77 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="75.3965" cx="546.77" cy="236.91" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 75.40 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="96.587232" cx="558.59" cy="205.12" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 96.59 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M582.23,186.40 C586.17,186.71 590.11,186.72 594.05,187.31 C597.99,187.91 601.93,229.10 605.88,229.10 C609.82,229.10 613.76,181.10 617.70,181.10 C621.64,181.10 625.58,200.48 629.52,200.48 C633.46,200.48 637.40,193.71 641.34,192.41 C645.28,191.10 649.22,191.41 653.16,189.82 C657.10,188.24 661.04,158.85 664.98,158.85 C668.92,158.85 672.86,180.00 676.80,187.45 C680.74,194.90 684.68,205.78 688.62,205.78 C692.57,205.78 696.51,195.09 700.45,189.75"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="109.06391" cx="582.23" cy="186.40" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 109.06 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="108.4575" cx="594.05" cy="187.31" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 108.46 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="80.602049" cx="605.88" cy="229.10" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 80.60 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="112.60245" cx="617.70" cy="181.10" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 112.60 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="99.682336" cx="629.52" cy="200.48" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 99.68 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="105.0632" cx="641.34" cy="192.41" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 105.06 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="106.78384" cx="653.16" cy="189.82" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 106.78 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="127.43404" cx="664.98" cy="158.85" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 127.43 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="108.36598" cx="676.80" cy="187.45" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 108.37 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="96.145746" cx="688.62" cy="205.78" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 96.15 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="106.83539" cx="700.45" cy="189.75" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 106.84 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series1)" stroke-dasharray="" d="M724.09,213.61"/>
+<circle data-model="gpt-6-luna" data-tier="default" data-value="90.925026" cx="724.09" cy="213.61" r="2.5" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / default: 90.93 TPS</title></circle>
+<circle cx="724.09" cy="213.61" r="4" fill="var(--series1)" stroke="var(--series1)" stroke-width="1.5"/>
+<path class="line" data-tier="priority" stroke="var(--series1)" stroke-dasharray="8,5" d="M641.34,196.79 C645.28,195.89 649.22,195.70 653.16,194.08 C657.10,192.46 661.04,178.70 664.98,171.01"/>
+<circle data-model="gpt-6-luna" data-tier="priority" data-value="102.1407" cx="641.34" cy="196.79" r="2.5" fill="var(--bg)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / priority: 102.14 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="priority" data-value="103.94733" cx="653.16" cy="194.08" r="2.5" fill="var(--bg)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / priority: 103.95 TPS</title></circle>
+<circle data-model="gpt-6-luna" data-tier="priority" data-value="119.32966" cx="664.98" cy="171.01" r="2.5" fill="var(--bg)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / priority: 119.33 TPS</title></circle>
+<path class="line" data-tier="priority" stroke="var(--series1)" stroke-dasharray="8,5" d="M724.09,208.81"/>
+<circle data-model="gpt-6-luna" data-tier="priority" data-value="94.124595" cx="724.09" cy="208.81" r="2.5" fill="var(--bg)" stroke="var(--series1)" stroke-width="1.5"><title>openai-codex / gpt-6-luna / priority: 94.12 TPS</title></circle>
+<circle cx="724.09" cy="208.81" r="4" fill="var(--bg)" stroke="var(--series1)" stroke-width="1.5"/>
+<path class="line" data-tier="default" stroke="var(--series0)" stroke-dasharray="" d="M73.91,271.65 C77.85,271.43 81.79,270.99 85.73,270.99 C89.67,270.99 93.61,279.43 97.55,283.65"/>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="52.233536" cx="73.91" cy="271.65" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 52.23 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="52.672879" cx="85.73" cy="270.99" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 52.67 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="44.231691" cx="97.55" cy="283.65" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 44.23 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series0)" stroke-dasharray="" d="M121.20,249.03 C125.14,248.32 129.08,246.90 133.02,246.90 C136.96,246.90 140.90,246.96 144.84,247.09 C148.78,247.21 152.72,267.20 156.66,272.85 C160.60,278.50 164.54,285.49 168.48,285.49 C172.42,285.49 176.36,253.25 180.30,244.01 C184.24,234.78 188.18,230.15 192.12,223.21"/>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="67.314219" cx="121.20" cy="249.03" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 67.31 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="68.732793" cx="133.02" cy="246.90" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 68.73 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="68.608185" cx="144.84" cy="247.09" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 68.61 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="51.432927" cx="156.66" cy="272.85" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 51.43 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="43.008674" cx="168.48" cy="285.49" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 43.01 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="70.659503" cx="180.30" cy="244.01" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 70.66 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="84.524018" cx="192.12" cy="223.21" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 84.52 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series0)" stroke-dasharray="" d="M251.23,288.30"/>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="41.134858" cx="251.23" cy="288.30" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 41.13 TPS</title></circle>
+<path class="line" data-tier="default" stroke="var(--series0)" stroke-dasharray="" d="M286.70,240.51 C290.64,245.33 294.58,254.97 298.52,254.97 C302.46,254.97 306.40,253.33 310.34,253.33 C314.28,253.33 318.22,273.62 322.16,273.62 C326.10,273.62 330.04,273.18 333.98,272.82 C337.92,272.46 341.86,271.16 345.80,271.16 C349.74,271.16 353.68,274.37 357.62,275.72 C361.57,277.06 365.51,279.34 369.45,279.34 C373.39,279.34 377.33,272.88 381.27,272.88 C385.21,272.88 389.15,274.96 393.09,276.61 C397.03,278.27 400.97,281.55 404.91,284.02 C408.85,286.49 412.79,291.45 416.73,291.45 C420.67,291.45 424.61,286.54 428.55,286.54 C432.49,286.54 436.43,300.11 440.38,300.11 C444.32,300.11 448.26,292.84 452.20,292.02 C456.14,291.19 460.08,291.27 464.02,290.55 C467.96,289.84 471.90,286.53 475.84,286.53 C479.78,286.53 483.72,290.31 487.66,291.05 C491.60,291.79 495.54,291.68 499.48,292.51 C503.42,293.35 507.36,301.01 511.30,301.01 C515.24,301.01 519.18,297.24 523.12,297.24 C527.07,297.24 531.01,299.62 534.95,299.62 C538.89,299.62 542.83,299.59 546.77,299.53 C550.71,299.47 554.65,286.52 558.59,286.52 C562.53,286.52 566.47,286.66 570.41,286.92 C574.35,287.17 578.29,294.75 582.23,295.84 C586.17,296.93 590.11,296.83 594.05,297.84 C597.99,298.85 601.93,304.10 605.88,304.10 C609.82,304.10 613.76,302.61 617.70,302.40 C621.64,302.20 625.58,302.26 629.52,302.03 C633.46,301.79 637.40,295.86 641.34,295.86 C645.28,295.86 649.22,296.42 653.16,296.42 C657.10,296.42 661.04,292.87 664.98,292.87 C668.92,292.87 672.86,301.51 676.80,302.77 C680.74,304.04 684.68,305.11 688.62,305.11 C692.57,305.11 696.51,303.39 700.45,303.39 C704.39,303.39 708.33,309.67 712.27,309.67 C716.21,309.67 720.15,298.56 724.09,293.01"/>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="72.996428" cx="286.70" cy="240.51" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 73.00 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="63.351857" cx="298.52" cy="254.97" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 63.35 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="64.444482" cx="310.34" cy="253.33" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 64.44 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="50.917034" cx="322.16" cy="273.62" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 50.92 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="51.453618" cx="333.98" cy="272.82" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 51.45 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="52.558338" cx="345.80" cy="271.16" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 52.56 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="49.521438" cx="357.62" cy="275.72" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 49.52 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="47.106525" cx="369.45" cy="279.34" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 47.11 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="51.411874" cx="381.27" cy="272.88" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 51.41 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="48.92425" cx="393.09" cy="276.61" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 48.92 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="43.985763" cx="404.91" cy="284.02" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 43.99 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="39.031109" cx="416.73" cy="291.45" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 39.03 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="42.308788" cx="428.55" cy="286.54" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 42.31 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="33.257761" cx="440.38" cy="300.11" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 33.26 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="38.656604" cx="452.20" cy="292.02" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 38.66 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="39.630378" cx="464.02" cy="290.55" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 39.63 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="42.314762" cx="475.84" cy="286.53" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 42.31 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="39.301743" cx="487.66" cy="291.05" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 39.30 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="38.324805" cx="499.48" cy="292.51" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 38.32 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="32.660843" cx="511.30" cy="301.01" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 32.66 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="35.17142" cx="523.12" cy="297.24" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 35.17 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="33.586585" cx="534.95" cy="299.62" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 33.59 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="33.647639" cx="546.77" cy="299.53" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 33.65 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="42.322481" cx="558.59" cy="286.52" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 42.32 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="42.055625" cx="570.41" cy="286.92" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 42.06 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="36.106121" cx="582.23" cy="295.84" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 36.11 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="34.774578" cx="594.05" cy="297.84" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 34.77 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="30.600876" cx="605.88" cy="304.10" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 30.60 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="31.73242" cx="617.70" cy="302.40" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 31.73 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="31.981952" cx="629.52" cy="302.03" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 31.98 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="36.091568" cx="641.34" cy="295.86" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 36.09 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="35.72143" cx="653.16" cy="296.42" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 35.72 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="38.087717" cx="664.98" cy="292.87" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 38.09 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="31.484638" cx="676.80" cy="302.77" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 31.48 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="29.923961" cx="688.62" cy="305.11" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 29.92 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="31.071101" cx="700.45" cy="303.39" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 31.07 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="26.884555" cx="712.27" cy="309.67" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 26.88 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="default" data-value="37.995024" cx="724.09" cy="293.01" r="2.5" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / default: 38.00 TPS</title></circle>
+<circle cx="724.09" cy="293.01" r="4" fill="var(--series0)" stroke="var(--series0)" stroke-width="1.5"/>
+<path class="line" data-tier="priority" stroke="var(--series0)" stroke-dasharray="8,5" d="M641.34,271.06 C645.28,270.05 649.22,269.51 653.16,268.03 C657.10,266.55 661.04,262.50 664.98,259.74"/>
+<circle data-model="gpt-6.1-sol" data-tier="priority" data-value="52.62851" cx="641.34" cy="271.06" r="2.5" fill="var(--bg)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / priority: 52.63 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="priority" data-value="54.648672" cx="653.16" cy="268.03" r="2.5" fill="var(--bg)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / priority: 54.65 TPS</title></circle>
+<circle data-model="gpt-6.1-sol" data-tier="priority" data-value="60.175731" cx="664.98" cy="259.74" r="2.5" fill="var(--bg)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / priority: 60.18 TPS</title></circle>
+<path class="line" data-tier="priority" stroke="var(--series0)" stroke-dasharray="8,5" d="M724.09,286.67"/>
+<circle data-model="gpt-6.1-sol" data-tier="priority" data-value="42.220014" cx="724.09" cy="286.67" r="2.5" fill="var(--bg)" stroke="var(--series0)" stroke-width="1.5"><title>openai-codex / gpt-6.1-sol / priority: 42.22 TPS</title></circle>
+<circle cx="724.09" cy="286.67" r="4" fill="var(--bg)" stroke="var(--series0)" stroke-width="1.5"/>
+<path d="M724.09,208.81 H740" fill="none" stroke="var(--series1)" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="748" y="213.81" font-size="14" font-weight="600" style="fill:var(--series1)">gpt-6-luna · Fast<title>openai-codex / gpt-6-luna / priority</title></text>
+<text x="970" y="213.81" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series1)">94.1</text>
+<path d="M724.09,213.61 C732.04,213.61 732.04,230.81 740,230.81" fill="none" stroke="var(--series1)" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="748" y="235.81" font-size="14" font-weight="600" style="fill:var(--series1)">gpt-6-luna · 일반<title>openai-codex / gpt-6-luna / default</title></text>
+<text x="970" y="235.81" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series1)">90.9</text>
+<path d="M664.98,249.64 C702.49,249.64 702.49,252.81 740,252.81" fill="none" stroke="var(--series2)" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="3,3"/>
+<text x="748" y="257.81" font-size="14" font-weight="600" style="fill:var(--series2)">gpt-6-astra · Fast<title>openai-codex / gpt-6-astra / priority</title></text>
+<text x="970" y="257.81" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series2)">66.9</text>
+<path d="M724.09,286.67 H740" fill="none" stroke="var(--series0)" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="748" y="291.67" font-size="14" font-weight="600" style="fill:var(--series0)">gpt-6.1-sol · Fast<title>openai-codex / gpt-6.1-sol / priority</title></text>
+<text x="970" y="291.67" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series0)">42.2</text>
+<path d="M724.09,293.01 C732.04,293.01 732.04,308.67 740,308.67" fill="none" stroke="var(--series0)" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="748" y="313.67" font-size="14" font-weight="600" style="fill:var(--series0)">gpt-6.1-sol · 일반<title>openai-codex / gpt-6.1-sol / default</title></text>
+<text x="970" y="313.67" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series0)">38.0</text>
+<path d="M724.09,310.51 C732.04,310.51 732.04,330.67 740,330.67" fill="none" stroke="var(--series2)" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="748" y="335.67" font-size="14" font-weight="600" style="fill:var(--series2)">gpt-6-astra · 일반<title>openai-codex / gpt-6-astra / default</title></text>
+<text x="970" y="335.67" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series2)">26.3</text>
 <text x="68" y="388" font-size="16" font-weight="600">정상 응답 수 <tspan font-size="12" font-weight="400" class="muted">· 구간별 표본, 건</tspan></text>
-<path d="M75.02,528.84 C79.70,514.18 84.38,484.85 89.06,484.85 C93.74,484.85 98.42,548.97 103.10,551.30 C107.78,553.64 112.46,555.00 117.14,555.00 C121.82,555.00 126.50,554.76 131.18,554.46 C135.86,554.15 140.54,552.05 145.22,551.58 C149.90,551.12 154.58,550.85 159.26,550.66 C163.94,550.46 168.62,550.24 173.30,550.24 C177.98,550.24 182.66,551.64 187.34,551.64 C192.02,551.64 196.70,540.30 201.38,540.30 C206.06,540.30 210.74,552.07 215.42,553.15 C220.10,554.23 224.78,555.00 229.46,555.00 C234.14,555.00 238.82,555.00 243.50,555.00 C248.18,555.00 252.86,555.00 257.54,555.00 C262.22,555.00 266.90,555.00 271.58,555.00 C276.26,555.00 280.94,552.32 285.62,552.32 C290.30,552.32 294.98,555.00 299.66,555.00 C304.34,555.00 309.02,555.00 313.70,555.00 C318.38,555.00 323.06,553.89 327.74,553.48 C332.42,553.07 337.10,553.08 341.78,552.46 C346.46,551.83 351.14,541.06 355.82,541.06 C360.50,541.06 365.18,547.90 369.86,548.83 C374.54,549.76 379.22,550.53 383.90,550.53 C388.58,550.53 393.26,548.60 397.94,546.61 C402.62,544.62 407.30,534.07 411.98,534.07 C416.66,534.07 421.34,545.85 426.02,546.79 C430.70,547.74 435.38,547.55 440.06,548.39 C444.74,549.22 449.42,554.24 454.10,554.24 C458.78,554.24 463.46,547.51 468.14,547.51 C472.82,547.51 477.50,553.53 482.18,553.53 C486.86,553.53 491.54,545.44 496.22,545.44 C500.90,545.44 505.58,550.67 510.26,550.67 C514.94,550.67 519.62,550.31 524.30,550.31 C528.98,550.31 533.66,551.15 538.34,551.26 C543.02,551.37 547.70,551.47 552.38,551.47 C557.06,551.47 561.74,549.30 566.42,547.67 C571.10,546.03 575.78,540.73 580.46,540.73 C585.14,540.73 589.82,550.91 594.50,550.91 C599.18,550.91 603.86,546.76 608.54,546.21 C613.22,545.66 617.90,545.21 622.58,545.21 C627.26,545.21 631.94,549.97 636.62,549.97 C641.30,549.97 645.98,526.88 650.66,526.88 C655.34,526.88 660.02,552.86 664.70,552.86 C669.38,552.86 674.06,539.91 678.74,539.91 C683.42,539.91 688.10,545.54 692.78,545.55 C697.46,545.57 702.14,545.56 706.82,545.57 C711.50,545.59 716.18,547.55 720.86,547.55 C725.54,547.55 730.22,541.76 734.90,534.57 C739.58,527.39 744.26,471.15 748.94,471.15 C753.62,471.15 758.30,519.80 762.98,544.12 L762.98,555 L75.02,555 Z" fill="url(#area)"/>
-<path d="M75.02,528.84 C79.70,514.18 84.38,484.85 89.06,484.85 C93.74,484.85 98.42,548.97 103.10,551.30 C107.78,553.64 112.46,555.00 117.14,555.00 C121.82,555.00 126.50,554.76 131.18,554.46 C135.86,554.15 140.54,552.05 145.22,551.58 C149.90,551.12 154.58,550.85 159.26,550.66 C163.94,550.46 168.62,550.24 173.30,550.24 C177.98,550.24 182.66,551.64 187.34,551.64 C192.02,551.64 196.70,540.30 201.38,540.30 C206.06,540.30 210.74,552.07 215.42,553.15 C220.10,554.23 224.78,555.00 229.46,555.00 C234.14,555.00 238.82,555.00 243.50,555.00 C248.18,555.00 252.86,555.00 257.54,555.00 C262.22,555.00 266.90,555.00 271.58,555.00 C276.26,555.00 280.94,552.32 285.62,552.32 C290.30,552.32 294.98,555.00 299.66,555.00 C304.34,555.00 309.02,555.00 313.70,555.00 C318.38,555.00 323.06,553.89 327.74,553.48 C332.42,553.07 337.10,553.08 341.78,552.46 C346.46,551.83 351.14,541.06 355.82,541.06 C360.50,541.06 365.18,547.90 369.86,548.83 C374.54,549.76 379.22,550.53 383.90,550.53 C388.58,550.53 393.26,548.60 397.94,546.61 C402.62,544.62 407.30,534.07 411.98,534.07 C416.66,534.07 421.34,545.85 426.02,546.79 C430.70,547.74 435.38,547.55 440.06,548.39 C444.74,549.22 449.42,554.24 454.10,554.24 C458.78,554.24 463.46,547.51 468.14,547.51 C472.82,547.51 477.50,553.53 482.18,553.53 C486.86,553.53 491.54,545.44 496.22,545.44 C500.90,545.44 505.58,550.67 510.26,550.67 C514.94,550.67 519.62,550.31 524.30,550.31 C528.98,550.31 533.66,551.15 538.34,551.26 C543.02,551.37 547.70,551.47 552.38,551.47 C557.06,551.47 561.74,549.30 566.42,547.67 C571.10,546.03 575.78,540.73 580.46,540.73 C585.14,540.73 589.82,550.91 594.50,550.91 C599.18,550.91 603.86,546.76 608.54,546.21 C613.22,545.66 617.90,545.21 622.58,545.21 C627.26,545.21 631.94,549.97 636.62,549.97 C641.30,549.97 645.98,526.88 650.66,526.88 C655.34,526.88 660.02,552.86 664.70,552.86 C669.38,552.86 674.06,539.91 678.74,539.91 C683.42,539.91 688.10,545.54 692.78,545.55 C697.46,545.57 702.14,545.56 706.82,545.57 C711.50,545.59 716.18,547.55 720.86,547.55 C725.54,547.55 730.22,541.76 734.90,534.57 C739.58,527.39 744.26,471.15 748.94,471.15 C753.62,471.15 758.30,519.80 762.98,544.12" class="line" stroke="var(--series0)" stroke-width="2.2"/>
-<path class="grid" d="M68,555.00 H770"/>
+<path d="M73.91,528.84 C77.85,514.18 81.79,484.85 85.73,484.85 C89.67,484.85 93.61,548.97 97.55,551.30 C101.49,553.64 105.43,555.00 109.38,555.00 C113.32,555.00 117.26,554.76 121.20,554.46 C125.14,554.15 129.08,552.05 133.02,551.58 C136.96,551.12 140.90,550.85 144.84,550.66 C148.78,550.46 152.72,550.24 156.66,550.24 C160.60,550.24 164.54,551.64 168.48,551.64 C172.42,551.64 176.36,540.30 180.30,540.30 C184.24,540.30 188.18,552.07 192.12,553.15 C196.07,554.23 200.01,555.00 203.95,555.00 C207.89,555.00 211.83,555.00 215.77,555.00 C219.71,555.00 223.65,555.00 227.59,555.00 C231.53,555.00 235.47,555.00 239.41,555.00 C243.35,555.00 247.29,552.32 251.23,552.32 C255.17,552.32 259.11,555.00 263.05,555.00 C266.99,555.00 270.93,555.00 274.88,555.00 C278.82,555.00 282.76,553.89 286.70,553.48 C290.64,553.07 294.58,553.08 298.52,552.46 C302.46,551.83 306.40,541.06 310.34,541.06 C314.28,541.06 318.22,547.90 322.16,548.83 C326.10,549.76 330.04,550.53 333.98,550.53 C337.92,550.53 341.86,548.60 345.80,546.61 C349.74,544.62 353.68,534.07 357.62,534.07 C361.57,534.07 365.51,545.85 369.45,546.79 C373.39,547.74 377.33,547.55 381.27,548.39 C385.21,549.22 389.15,554.24 393.09,554.24 C397.03,554.24 400.97,547.51 404.91,547.51 C408.85,547.51 412.79,553.53 416.73,553.53 C420.67,553.53 424.61,545.44 428.55,545.44 C432.49,545.44 436.43,550.67 440.38,550.67 C444.32,550.67 448.26,550.31 452.20,550.31 C456.14,550.31 460.08,551.15 464.02,551.26 C467.96,551.37 471.90,551.47 475.84,551.47 C479.78,551.47 483.72,549.30 487.66,547.67 C491.60,546.03 495.54,540.73 499.48,540.73 C503.42,540.73 507.36,550.91 511.30,550.91 C515.24,550.91 519.18,546.76 523.12,546.21 C527.07,545.66 531.01,545.21 534.95,545.21 C538.89,545.21 542.83,549.97 546.77,549.97 C550.71,549.97 554.65,526.88 558.59,526.88 C562.53,526.88 566.47,552.86 570.41,552.86 C574.35,552.86 578.29,539.91 582.23,539.91 C586.17,539.91 590.11,545.54 594.05,545.55 C597.99,545.57 601.93,545.56 605.88,545.57 C609.82,545.59 613.76,547.55 617.70,547.55 C621.64,547.55 625.58,541.76 629.52,534.57 C633.46,527.39 637.40,471.15 641.34,471.15 C645.28,471.15 649.22,502.40 653.16,513.97 C657.10,525.53 661.04,540.86 664.98,543.12 C668.92,545.39 672.86,546.33 676.80,546.98 C680.74,547.63 684.68,548.28 688.62,548.28 C692.57,548.28 696.51,542.11 700.45,542.11 C704.39,542.11 708.33,553.82 712.27,553.82 C716.21,553.82 720.15,543.95 724.09,539.01 L724.09,555 L73.91,555 Z" fill="url(#area)"/>
+<path d="M73.91,528.84 C77.85,514.18 81.79,484.85 85.73,484.85 C89.67,484.85 93.61,548.97 97.55,551.30 C101.49,553.64 105.43,555.00 109.38,555.00 C113.32,555.00 117.26,554.76 121.20,554.46 C125.14,554.15 129.08,552.05 133.02,551.58 C136.96,551.12 140.90,550.85 144.84,550.66 C148.78,550.46 152.72,550.24 156.66,550.24 C160.60,550.24 164.54,551.64 168.48,551.64 C172.42,551.64 176.36,540.30 180.30,540.30 C184.24,540.30 188.18,552.07 192.12,553.15 C196.07,554.23 200.01,555.00 203.95,555.00 C207.89,555.00 211.83,555.00 215.77,555.00 C219.71,555.00 223.65,555.00 227.59,555.00 C231.53,555.00 235.47,555.00 239.41,555.00 C243.35,555.00 247.29,552.32 251.23,552.32 C255.17,552.32 259.11,555.00 263.05,555.00 C266.99,555.00 270.93,555.00 274.88,555.00 C278.82,555.00 282.76,553.89 286.70,553.48 C290.64,553.07 294.58,553.08 298.52,552.46 C302.46,551.83 306.40,541.06 310.34,541.06 C314.28,541.06 318.22,547.90 322.16,548.83 C326.10,549.76 330.04,550.53 333.98,550.53 C337.92,550.53 341.86,548.60 345.80,546.61 C349.74,544.62 353.68,534.07 357.62,534.07 C361.57,534.07 365.51,545.85 369.45,546.79 C373.39,547.74 377.33,547.55 381.27,548.39 C385.21,549.22 389.15,554.24 393.09,554.24 C397.03,554.24 400.97,547.51 404.91,547.51 C408.85,547.51 412.79,553.53 416.73,553.53 C420.67,553.53 424.61,545.44 428.55,545.44 C432.49,545.44 436.43,550.67 440.38,550.67 C444.32,550.67 448.26,550.31 452.20,550.31 C456.14,550.31 460.08,551.15 464.02,551.26 C467.96,551.37 471.90,551.47 475.84,551.47 C479.78,551.47 483.72,549.30 487.66,547.67 C491.60,546.03 495.54,540.73 499.48,540.73 C503.42,540.73 507.36,550.91 511.30,550.91 C515.24,550.91 519.18,546.76 523.12,546.21 C527.07,545.66 531.01,545.21 534.95,545.21 C538.89,545.21 542.83,549.97 546.77,549.97 C550.71,549.97 554.65,526.88 558.59,526.88 C562.53,526.88 566.47,552.86 570.41,552.86 C574.35,552.86 578.29,539.91 582.23,539.91 C586.17,539.91 590.11,545.54 594.05,545.55 C597.99,545.57 601.93,545.56 605.88,545.57 C609.82,545.59 613.76,547.55 617.70,547.55 C621.64,547.55 625.58,541.76 629.52,534.57 C633.46,527.39 637.40,471.15 641.34,471.15 C645.28,471.15 649.22,502.40 653.16,513.97 C657.10,525.53 661.04,540.86 664.98,543.12 C668.92,545.39 672.86,546.33 676.80,546.98 C680.74,547.63 684.68,548.28 688.62,548.28 C692.57,548.28 696.51,542.11 700.45,542.11 C704.39,542.11 708.33,553.82 712.27,553.82 C716.21,553.82 720.15,543.95 724.09,539.01" class="line" stroke="var(--series0)" stroke-width="2.2"/>
+<path class="grid" d="M68,555.00 H730"/>
 <text x="56" y="559.00" text-anchor="end" font-size="13" class="muted">0</text>
-<path class="grid" d="M68,513.33 H770"/>
+<path class="grid" d="M68,513.33 H730"/>
 <text x="56" y="517.33" text-anchor="end" font-size="13" class="muted">4,000</text>
-<path class="grid" d="M68,471.67 H770"/>
+<path class="grid" d="M68,471.67 H730"/>
 <text x="56" y="475.67" text-anchor="end" font-size="13" class="muted">8,000</text>
-<path class="grid" d="M68,430.00 H770"/>
+<path class="grid" d="M68,430.00 H730"/>
 <text x="56" y="434.00" text-anchor="end" font-size="13" class="muted">12,000</text>
-<circle cx="748.94" cy="471.15" r="3.5" fill="var(--series0)"/>
-<text x="722.00" y="459.15" text-anchor="middle" font-size="12" font-weight="600">최다 8,050</text>
-<circle cx="762.98" cy="544.12" r="4" fill="var(--series0)"/>
-<text x="788" y="549.12" font-size="14" style="fill:var(--series0)">정상 응답</text>
-<text x="970" y="549.12" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series0)">1,044</text>
+<circle cx="641.34" cy="471.15" r="3.5" fill="var(--series0)"/>
+<text x="641.34" y="459.15" text-anchor="middle" font-size="12" font-weight="600">최다 8,050</text>
+<circle cx="724.09" cy="539.01" r="4" fill="var(--series0)"/>
+<text x="748" y="544.01" font-size="14" style="fill:var(--series0)">정상 응답</text>
+<text x="970" y="544.01" text-anchor="end" font-size="15" font-weight="650" style="fill:var(--series0)">1,535</text>
 <path d="M68.00,555 v4" stroke="var(--axis)" stroke-width="1"/>
 <text x="68.00" y="579" text-anchor="start" font-size="13" class="muted">10/17</text>
-<path d="M180.32,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="180.32" y="579" text-anchor="middle" font-size="13" class="muted">10/18</text>
-<path d="M292.64,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="292.64" y="579" text-anchor="middle" font-size="13" class="muted">10/19</text>
-<path d="M404.96,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="404.96" y="579" text-anchor="middle" font-size="13" class="muted">10/20</text>
-<path d="M517.28,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="517.28" y="579" text-anchor="middle" font-size="13" class="muted">10/21</text>
-<path d="M629.60,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="629.60" y="579" text-anchor="middle" font-size="13" class="muted">10/22</text>
-<path d="M741.92,555 v4" stroke="var(--axis)" stroke-width="1"/>
-<text x="741.92" y="579" text-anchor="middle" font-size="13" class="muted">10/23</text>
-<text x="68" y="605" font-size="12" class="muted">빈 구간은 응답 없음 · 곡선은 표시용 보간 · 마지막 03:00–04:22 부분 집계</text>
+<path d="M162.57,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="162.57" y="579" text-anchor="middle" font-size="13" class="muted">10/18</text>
+<path d="M257.14,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="257.14" y="579" text-anchor="middle" font-size="13" class="muted">10/19</text>
+<path d="M351.71,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="351.71" y="579" text-anchor="middle" font-size="13" class="muted">10/20</text>
+<path d="M446.29,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="446.29" y="579" text-anchor="middle" font-size="13" class="muted">10/21</text>
+<path d="M540.86,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="540.86" y="579" text-anchor="middle" font-size="13" class="muted">10/22</text>
+<path d="M635.43,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="635.43" y="579" text-anchor="middle" font-size="13" class="muted">10/23</text>
+<path d="M730.00,555 v4" stroke="var(--axis)" stroke-width="1"/>
+<text x="730.00" y="579" text-anchor="end" font-size="13" class="muted">10/24</text>
+<text x="68" y="605" font-size="12" class="muted">빈 구간은 응답 없음 · 곡선은 표시용 보간 · 마지막 21:00–22:52 부분 집계</text>
 </svg>

@@ -787,32 +787,19 @@ def render_svg(bucket_rows, cutoff):
     ordered = sorted(bucket_rows, key=lambda b: parse_time(b['start']))
     if not ordered:
         ordered = [dict(start=cutoff.replace(hour=0, minute=0, second=0, microsecond=0).isoformat(), groups=[])]
-    # Combine tier populations using sufficient statistics, not rates or medians.
-    combined = []
-    for bucket in ordered:
-        populations = defaultdict(list)
-        for group in bucket['groups']:
-            populations[(group['provider'], group['model'])].append(group)
-        groups = []
-        for (provider, model), values in sorted(populations.items()):
-            gen_ms = sum(g['generation_ms'] for g in values)
-            gen_tokens = sum(g['generation_output_tokens'] for g in values)
-            groups.append(dict(provider=provider, model=model, n=sum(g['n'] for g in values),
-                               generation_tps=gen_tokens * 1000 / gen_ms if gen_ms else None))
-        combined.append(dict(start=bucket['start'], groups=groups))
-    ordered = combined
-    models = sorted({(g['provider'], g['model']) for b in ordered for g in b['groups']
+    series = sorted({_report_key(g) for b in ordered for g in b['groups']
                      if g['generation_tps'] is not None})
+    tier_names = {'default': '일반', 'priority': 'Fast', 'unknown': '미상'}
     def model_color(model):
         for index, fragment in enumerate(('sol', 'luna', 'astra', 'step')):
             if fragment in model[1].lower():
                 return f'var(--series{index})'
-        checksum = hashlib.sha256((' / '.join(model)).encode()).digest()
+        checksum = hashlib.sha256((' / '.join(model[:2])).encode()).digest()
         return f'var(--series{4 + checksum[0] % 4})'
 
-    left, right = 68, 770
+    left, right = 68, 730
     top = 110
-    plot_height = max(240, len(models) * 26)
+    plot_height = max(240, len(series) * 28)
     bottom = top + plot_height
     count_top = bottom + 80
     count_height = 125
@@ -832,8 +819,8 @@ def render_svg(bucket_rows, cutoff):
 
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="{height}" viewBox="0 0 1000 {height}" style="max-width:100%;height:auto" role="img" aria-labelledby="title desc">',
-        '<title id="title">Coding agent generation speed and response activity</title>',
-        '<desc id="desc">Three-hour KST buckets. Gaps mean no valid measurement, not zero speed. Curves are observational.</desc>',
+        '<title id="title">Coding agent generation speed by model and service tier</title>',
+        '<desc id="desc">Three-hour KST buckets, separated by provider, model and service tier. Solid lines are default, dashed lines priority, dotted lines other tiers. Gaps mean no valid measurement. End labels show each series last valid observation.</desc>',
         '<defs>',
         '  <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">',
         '    <stop stop-color="var(--series0)" stop-opacity=".25"/>',
@@ -842,9 +829,13 @@ def render_svg(bucket_rows, cutoff):
         '</defs>',
         _svg_theme(),
         f'<rect width="1000" height="{height}" fill="var(--bg)"/>',
-        '<text x="68" y="36" font-size="26" font-weight="650">모델별 처리 속도</text>',
+        '<text x="68" y="36" font-size="26" font-weight="650">모델별 처리 속도 · 일반 / Fast</text>',
         f'<text x="68" y="62" font-size="13" class="muted">{esc(first.strftime("%m.%d"))} — {esc(cutoff.strftime("%m.%d"))} · 3시간 집계 · {esc(cutoff.strftime("%Y-%m-%d %H:%M"))} KST 기준</text>',
         '<text x="68" y="94" font-size="15" font-weight="600">생성 TPS <tspan font-size="12" font-weight="400" class="muted">· 첫 토큰 대기 제외</tspan></text>',
+        '<path d="M410,90 H440" class="line" stroke="var(--text)"/>',
+        '<text x="448" y="94" font-size="12" class="muted">일반 · default</text>',
+        '<path d="M575,90 H605" class="line" stroke="var(--text)" stroke-dasharray="8,5"/>',
+        '<text x="613" y="94" font-size="12" class="muted">Fast · priority</text>',
     ]
 
     # Upper panel: grid & labels
@@ -856,11 +847,13 @@ def render_svg(bucket_rows, cutoff):
 
     # Upper panel: model runs & endpoints
     endpoints = []
-    for model in models:
+    for model in series:
         color = model_color(model)
+        dash = {'default': '', 'priority': '8,5'}.get(model[2], '2,5')
+        marker_fill = 'var(--bg)' if model[2] == 'priority' else color
         runs, current = [], []
         for bucket, stamp in zip(ordered, starts):
-            group = next((g for g in bucket['groups'] if (g['provider'], g['model']) == model), None)
+            group = next((g for g in bucket['groups'] if _report_key(g) == model), None)
             value = group['generation_tps'] if group else None
             if value is None:
                 if current:
@@ -874,12 +867,12 @@ def render_svg(bucket_rows, cutoff):
         if current:
             runs.append(current)
         for run in runs:
-            svg.append(f'<path class="line" stroke="{color}" d="{_report_curve([(a, b) for a, b, _ in run])}"/>')
+            svg.append(f'<path class="line" data-tier="{esc(model[2])}" stroke="{color}" stroke-dasharray="{dash}" d="{_report_curve([(a, b) for a, b, _ in run])}"/>')
             for xx, yy, value in run:
-                svg.append(f'<circle cx="{xx:.2f}" cy="{yy:.2f}" r="2.5" fill="{color}"><title>{esc(" / ".join(model))}: {value:.2f} TPS</title></circle>')
+                svg.append(f'<circle data-model="{esc(model[1])}" data-tier="{esc(model[2])}" data-value="{value:.8g}" cx="{xx:.2f}" cy="{yy:.2f}" r="2.5" fill="{marker_fill}" stroke="{color}" stroke-width="1.5"><title>{esc(" / ".join(model))}: {value:.2f} TPS</title></circle>')
         if runs:
             xx, yy, value = runs[-1][-1]
-            svg.append(f'<circle cx="{xx:.2f}" cy="{yy:.2f}" r="4" fill="{color}"/>')
+            svg.append(f'<circle cx="{xx:.2f}" cy="{yy:.2f}" r="4" fill="{marker_fill}" stroke="{color}" stroke-width="1.5"/>')
             endpoints.append((yy, xx, value, model, color))
 
     # Collision-free endpoint labels
@@ -897,6 +890,7 @@ def render_svg(bucket_rows, cutoff):
             mx = (xx + guide_x) / 2
             svg.append(f'<path d="M{xx:.2f},{yy:.2f} C{mx:.2f},{yy:.2f} {mx:.2f},{label_y:.2f} {guide_x},{label_y:.2f}" fill="none" stroke="{color}" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="3,3"/>')
         name = model[1] if len(model[1]) <= 18 else model[1][:16] + '…'
+        name += ' · ' + tier_names.get(model[2], model[2])
         svg.append(f'<text x="{text_x}" y="{label_y + 5:.2f}" font-size="14" font-weight="600" style="fill:{color}">{esc(name)}<title>{esc(" / ".join(model))}</title></text>')
         svg.append(f'<text x="970" y="{label_y + 5:.2f}" text-anchor="end" font-size="15" font-weight="650" style="fill:{color}">{value:.1f}</text>')
 
@@ -1364,16 +1358,20 @@ class ReportTests(unittest.TestCase):
                 build_report(project)
                 self.assertFalse(monthly.exists())
 
-    def test_svg_combines_tiers_by_sums(self):
-        rows = [self.sample(model='gpt-sol', duration_ms=2000,ttft_ms=1000,output_tokens=100),
-                self.sample(model='gpt-sol',tier='priority',duration_ms=10000,ttft_ms=1000,output_tokens=900)]
-        bucket = _report_day(rows,'c'*64)['buckets']
-        svg = render_svg(bucket,parse_time('2026-10-22T03:00:00+09:00'))
-        tree = ET.fromstring(svg)
+    def test_svg_preserves_tier_rates_and_distinguishes_fast(self):
+        rows = [self.sample(model='gpt-sol'),
+                self.sample(model='gpt-sol', tier='priority', output_tokens=200),
+                self.sample(model='gpt-sol', tier='unknown', output_tokens=50)]
+        buckets = _report_day(rows,'c'*64)['buckets']
+        tree = ET.fromstring(render_svg(buckets,parse_time('2026-10-22T03:00:00+09:00')))
         namespace = {'s':'http://www.w3.org/2000/svg'}
-        titles = [node.text for node in tree.findall('.//s:circle/s:title',namespace)]
-        self.assertEqual(len(titles),1)
-        self.assertIn('100.00 TPS',titles[0])
+        points = tree.findall('.//s:circle[@data-tier]',namespace)
+        self.assertEqual({node.attrib['data-tier']:float(node.attrib['data-value']) for node in points},
+                         {'default':100, 'priority':200, 'unknown':50})
+        lines = {node.attrib['data-tier']:node for node in tree.findall('.//s:path[@data-tier]',namespace)}
+        self.assertFalse(lines['default'].attrib['stroke-dasharray'])
+        self.assertTrue(lines['priority'].attrib['stroke-dasharray'])
+        self.assertEqual(lines['default'].attrib['stroke'],lines['priority'].attrib['stroke'])
 
     def test_fast_bars_use_shared_scale_and_actual_rates(self):
         cutoff = parse_time('2026-10-22T03:00:00+09:00')

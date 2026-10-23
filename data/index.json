@@ -57,24 +57,24 @@
       "sha256": "152d7b8c7d2ac6a36059c5f843ceddaa556ff6591023657ec6b061574fdf0e42"
     },
     {
-      "asset": "2026-10-23.a7377e9ceb132831757d1c29aacd1a062400fd83b9990e2d7940a22d21a66e08.jsonl.gz",
-      "bytes": 1032333,
+      "asset": "2026-10-23.ec3526d600027b2c79d751b06cd6c24ee5edf4783dbbb27b2cfaa28261a0384b.jsonl.gz",
+      "bytes": 2031942,
       "day": "2026-10-23",
       "release_tag": "data-2026-10",
-      "rows": 9170,
-      "sha256": "a7377e9ceb132831757d1c29aacd1a062400fd83b9990e2d7940a22d21a66e08"
+      "rows": 17550,
+      "sha256": "ec3526d600027b2c79d751b06cd6c24ee5edf4783dbbb27b2cfaa28261a0384b"
     }
   ],
   "metric_version": 1,
   "scan": {
-    "changed_files": 28,
-    "duplicates": 0,
-    "files": 3590,
+    "changed_files": 371,
+    "duplicates": 12048,
+    "files": 3971,
     "incomplete_lines": 0,
     "malformed_lines": 0
   },
   "schema_version": 1,
   "since": "2026-10-16",
-  "source_cutoff": "2026-10-22T19:22:13.579Z",
+  "source_cutoff": "2026-10-23T13:52:56.697Z",
   "timezone": "Asia/Seoul"
 }

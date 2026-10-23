@@ -69,7 +69,9 @@ GitHub 공식 한도는 Release당 asset 1,000개, 파일당 2 GiB 미만입니�
 
 TPS는 생성 속도, TTFT는 첫 토큰 대기, E2E는 첫 토큰 대기를 포함한 처리량입니다. 사용자 체감 지연이나 모델 자체 성능을 이 숫자 하나로 단정하지 않습니다.
 
-Fast 비교는 같은 provider/model의 default와 priority가 모두 존재하는 3시간 구간으로 제한합니다. tier 미상은 일반으로 간주하지 않습니다. 응답 수와 독립 세션 수를 함께 보고, 어느 한쪽이 30건 또는 5세션 미만이면 표본 부족을 경고합니다. 입력·context·출력 길이, 작업 종류, 시간대와 네트워크·서버 상태는 통제되지 않았습니다.
+`report.svg` 상단은 모델과 tier별 생성 TPS 추세를 분리합니다. 같은 모델은 같은 색이며 일반(default)은 실선·채운 점, Fast(priority)는 파선·빈 점입니다. 끝 라벨과 툴팁에도 tier를 표시합니다. 미상은 일반으로 간주하지 않고 기타 tier는 점선과 실제 tier 이름으로 구분합니다. 끝값은 각 계열의 마지막 유효 관측값이며 상단 TPS를 tier 간 합산하지 않습니다. 하단 정상 응답 수만 모든 tier를 합칩니다.
+
+`fast-comparison.svg`의 일반/Fast 비교는 같은 provider/model의 default와 priority가 모두 존재하는 3시간 구간으로 제한합니다. 추세 그래프와 달리 겹치는 구간만 비교하며 tier 미상은 일반으로 간주하지 않습니다. 응답 수와 독립 세션 수를 함께 보고, 어느 한쪽이 30건 또는 5세션 미만이면 표본 부족을 경고합니다. 입력·context·출력 길이, 작업 종류, 시간대와 네트워크·서버 상태는 통제되지 않았습니다.
 
 생성 TPS는 유효 TTFT가 있는 응답만 분자·분모에 함께 사용합니다. TTFT가 없으면 E2E에는 포함되더라도 생성 TPS에서는 제외될 수 있습니다. context 중앙값은 입력 + 캐시 읽기 토큰의 대리지표이며, 세션 수는 집계 구간 간 단순 합산할 수 없습니다.
 
@@ -97,7 +99,7 @@ Calendar-month summary of direct daily aggregates; rates below are ratios of sum
 | 2026-07 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-08 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-09 | 0 | 0 | — | — | 0 / 0 / 0 |
-| 2026-10 | 8 | 52244 | 44.68 | 36.14 | 890 / 56 / 0 |
+| 2026-10 | 8 | 60579 | 44.02 | 36.00 | 924 / 67 / 0 |
 
 Timing is local client-observed. TTFT must be finite and 0 ≤ TTFT < duration for generation TPS; otherwise the response can remain E2E-valid. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.
 
