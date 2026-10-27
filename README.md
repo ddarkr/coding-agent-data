@@ -1,3 +1,7 @@
+# Coding Agent Data
+
+제가 실 사용 환경에서 Coding Agent를 사용하면서 수집한 데이터와 통계를 공유합니다.
+
 <!-- REPORT:START -->
 
 ## Latest 7 KST dates
@@ -46,3 +50,7 @@ Priority and default are compared only within the same provider/model and bucket
 </details>
 
 <!-- REPORT:END -->
+
+## 데이터 사용
+
+제한 없음, 자유입니다.
