@@ -75,6 +75,19 @@ TPS는 생성 속도, TTFT는 첫 토큰 대기, E2E는 첫 토큰 대기를 포
 
 생성 TPS는 유효 TTFT가 있는 응답만 분자·분모에 함께 사용합니다. TTFT가 없으면 E2E에는 포함되더라도 생성 TPS에서는 제외될 수 있습니다. context 중앙값은 입력 + 캐시 읽기 토큰의 대리지표이며, 세션 수는 집계 구간 간 단순 합산할 수 없습니다.
 
+## Terra 초기 관측 (2026-10-27)
+
+아래는 수집 cutoff `2026-10-27T01:36:31.145Z`의 초기 스냅샷입니다. 최신 보고서와 구분해서 읽습니다. `openai-codex`의 응답 timestamp가 KST 10:31:12.569 이상, 10:36:31.145 미만인 같은 시간대만 비교했습니다.
+
+| 모델·tier | 정상 응답 수 | 세션 수 | 생성 TPS | 대기 포함 TPS | TTFT 중앙값 |
+|---|---:|---:|---:|---:|---:|
+| gpt-6.1-terra / default | 59 | 3 | 86.06 | 26.99 | 2.05초 |
+| gpt-6.1-sol / default | 48 | 4 | 48.48 | 19.43 | 4.12초 |
+
+Terra 정상 응답은 모두 일반(default)이며 Fast(priority) 표본은 없습니다. Terra 로그에는 정상 응답 외에 tier 미상의 중단 1건이 있고 오류는 0건입니다. TTFT의 표본 p95는 17.87초, 최대는 22.58초이며 7/59건이 10초를 초과했습니다. p95는 원표본 정렬 후 선형보간한 값입니다.
+
+두 모델 모두 5세션 미만이고 입력·문맥·출력 길이와 작업 구성이 다릅니다. 같은 시각의 관찰 비교이지 통제 벤치마크가 아니며, 속도 차이의 원인이나 코딩 정확도·수정 품질은 평가하지 않았습니다. Luna·Astra는 이 짧은 비교 구간에 유효 표본이 없어 제외했습니다.
+
 ## 장기 통계
 
 아래 영역은 `report`가 직접 계산한 일별 집계에서 최근 12개월 통계를 생성합니다. 데이터가 없는 날짜와 월을 0 TPS로 취급하지 않습니다.
@@ -99,7 +112,7 @@ Calendar-month summary of direct daily aggregates; rates below are ratios of sum
 | 2026-07 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-08 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-09 | 0 | 0 | — | — | 0 / 0 / 0 |
-| 2026-10 | 8 | 60579 | 44.02 | 36.00 | 924 / 67 / 0 |
+| 2026-10 | 12 | 78318 | 42.66 | 34.97 | 1309 / 109 / 0 |
 
 Timing is local client-observed. TTFT must be finite and 0 ≤ TTFT < duration for generation TPS; otherwise the response can remain E2E-valid. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.
 
