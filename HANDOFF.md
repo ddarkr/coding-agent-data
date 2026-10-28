@@ -75,6 +75,8 @@ TPS는 생성 속도, TTFT는 첫 토큰 대기, E2E는 첫 토큰 대기를 포
 
 생성 TPS는 유효 TTFT가 있는 응답만 분자·분모에 함께 사용합니다. TTFT가 없으면 E2E에는 포함되더라도 생성 TPS에서는 제외될 수 있습니다. context 중앙값은 입력 + 캐시 읽기 토큰의 대리지표이며, 세션 수는 집계 구간 간 단순 합산할 수 없습니다.
 
+`doda` 응답에는 첫 출력과 완료 사이가 10ms 미만인 표본이 다수 있어 버퍼링 또는 계측 영향이 의심됩니다. 이 경로의 생성 TPS는 실제 스트리밍 속도로 해석하지 않습니다. 세션의 Fast 요청 설정과 응답에서 확인된 tier도 별개이며, 설정만으로 `unknown` 응답을 `priority`로 바꾸지 않습니다.
+
 ## Terra 초기 관측 (2026-10-27)
 
 아래는 수집 cutoff `2026-10-27T01:36:31.145Z`의 초기 스냅샷입니다. 최신 보고서와 구분해서 읽습니다. `openai-codex`의 응답 timestamp가 KST 10:31:12.569 이상, 10:36:31.145 미만인 같은 시간대만 비교했습니다.
@@ -87,6 +89,21 @@ TPS는 생성 속도, TTFT는 첫 토큰 대기, E2E는 첫 토큰 대기를 포
 Terra 정상 응답은 모두 일반(default)이며 Fast(priority) 표본은 없습니다. Terra 로그에는 정상 응답 외에 tier 미상의 중단 1건이 있고 오류는 0건입니다. TTFT의 표본 p95는 17.87초, 최대는 22.58초이며 7/59건이 10초를 초과했습니다. p95는 원표본 정렬 후 선형보간한 값입니다.
 
 두 모델 모두 5세션 미만이고 입력·문맥·출력 길이와 작업 구성이 다릅니다. 같은 시각의 관찰 비교이지 통제 벤치마크가 아니며, 속도 차이의 원인이나 코딩 정확도·수정 품질은 평가하지 않았습니다. Luna·Astra는 이 짧은 비교 구간에 유효 표본이 없어 제외했습니다.
+
+## Terra Fast 설정 전후 관측 (2026-10-28)
+
+수집 cutoff `2026-10-28T14:50:25.537Z`. `doda / gpt-6.1-terra` 한 세션에서 KST 23:40:43의 `priority` 설정 전후 각 9분 42초를 비교했습니다. 전환 전에 시작한 응답은 전 구간으로 분류했습니다. 설정 전 tier와 실제 서버 적용 tier는 확인되지 않아 일반 대 Fast의 확정 비교가 아닙니다.
+
+![Terra Fast 설정 전후 추세](terra-fast-observation.svg)
+
+| 구간 | 정상 응답 | 대기 포함 TPS | 첫 출력 대기 중앙값 | 전체 응답시간 중앙값 | 출력 토큰 중앙값 | Context 중앙값 |
+|---|---:|---:|---:|---:|---:|---:|
+| 설정 전 · tier 미확인 | 23 | 60.94 | 10.11초 | 13.54초 | 828 | 253,453 |
+| Fast 설정 후 | 22 | 83.73 | 8.79초 | 14.25초 | 1,122 | 334,742.5 |
+
+설정 후 중단 4건은 처리량에서 제외했습니다. 두 구간 각각 7건의 첫 출력과 완료 사이가 10ms 미만이어서 생성 TPS는 비교하지 않았습니다. 별도 세션의 Fast 설정 후 17건은 이 비교에 합치지 않았습니다. 응답 기록에는 실제 적용 tier가 없고 이전 요청 설정도 미상입니다. 작업·문맥·출력 길이가 통제되지 않은 1세션 관찰이므로 속도 변화의 원인을 Fast로 단정할 수 없습니다.
+
+수치와 5분 구간은 [구조화된 관측 데이터](data/observations/2026-10-28-terra-fast.json)에 보존합니다. 요청 설정은 로컬 세션의 분기 조상과 요청 시작 시각으로 확인했으며, 일별 응답 아카이브에는 이 설정 정보가 없어 해당 아카이브만으로 설정 전후 분류를 재현할 수 없습니다.
 
 ## 장기 통계
 
@@ -112,7 +129,7 @@ Calendar-month summary of direct daily aggregates; rates below are ratios of sum
 | 2026-07 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-08 | 0 | 0 | — | — | 0 / 0 / 0 |
 | 2026-09 | 0 | 0 | — | — | 0 / 0 / 0 |
-| 2026-10 | 12 | 78318 | 42.66 | 34.97 | 1309 / 109 / 0 |
+| 2026-10 | 13 | 89004 | 43.30 | 34.98 | 1429 / 144 / 0 |
 
 Timing is local client-observed. TTFT must be finite and 0 ≤ TTFT < duration for generation TPS; otherwise the response can remain E2E-valid. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.
 

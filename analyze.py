@@ -1048,6 +1048,7 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
     summary = summarize_samples(recent)
     lines = [f'## Latest {days} KST dates', '', f'Cutoff: **{_report_md(iso_utc(cutoff))}**. Source coverage: {index["since"]} through {_report_md(index["source_cutoff"])}.', '',
              '[운영·사용법·장기 통계](HANDOFF.md)', '',
+             '주의: `doda`의 생성 TPS는 버퍼링 또는 계측 영향으로 실제 스트리밍 속도를 나타내지 않을 수 있습니다. Fast 설정 관측은 운영 문서를 참고하세요.', '',
              '![Coding agent pulse](report.svg)', '',
              f'Successful timed responses: **{summary["n"]:,}** across **{summary["sessions"]:,}** sessions. Excluded: errors {summary["errors"]:,}, aborted {summary["aborted"]:,}, other/invalid timing or output {summary["invalid"]:,}. Generation-eligible: {summary["generation_n"]:,}.', '',
              '| Provider / model / tier | n | Sessions | Gen TPS | E2E TPS | TTFT median ms |', '|---|---:|---:|---:|---:|---:|']

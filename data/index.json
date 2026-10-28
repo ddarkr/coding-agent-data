@@ -89,24 +89,32 @@
       "sha256": "295efe40f203ddd741c125b3b91428eeccd3e3cce851270958326d01947c05bb"
     },
     {
-      "asset": "2026-10-27.ae8ef0f2736ac1ea3b73217939d5822c568eb3cc94f771a3479d26aeb74a9f8c.jsonl.gz",
-      "bytes": 66117,
+      "asset": "2026-10-27.50dbf2ea4f5f5aada5f6bc07f6658bcef1a36f38394d0ada512328c6e1782d40.jsonl.gz",
+      "bytes": 704750,
       "day": "2026-10-27",
       "release_tag": "data-2026-10",
-      "rows": 700,
-      "sha256": "ae8ef0f2736ac1ea3b73217939d5822c568eb3cc94f771a3479d26aeb74a9f8c"
+      "rows": 6600,
+      "sha256": "50dbf2ea4f5f5aada5f6bc07f6658bcef1a36f38394d0ada512328c6e1782d40"
+    },
+    {
+      "asset": "2026-10-28.2799118e9eb5a326fef2989fe33350fc96601dc23be264faf82c8282671f90b3.jsonl.gz",
+      "bytes": 504140,
+      "day": "2026-10-28",
+      "release_tag": "data-2026-10",
+      "rows": 4941,
+      "sha256": "2799118e9eb5a326fef2989fe33350fc96601dc23be264faf82c8282671f90b3"
     }
   ],
   "metric_version": 1,
   "scan": {
-    "changed_files": 7,
+    "changed_files": 11,
     "duplicates": 12522,
-    "files": 4391,
+    "files": 4678,
     "incomplete_lines": 0,
     "malformed_lines": 0
   },
   "schema_version": 1,
   "since": "2026-10-16",
-  "source_cutoff": "2026-10-27T01:36:31.145Z",
+  "source_cutoff": "2026-10-28T14:50:25.537Z",
   "timezone": "Asia/Seoul"
 }

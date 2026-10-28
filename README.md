@@ -6,26 +6,32 @@
 
 ## Latest 7 KST dates
 
-Cutoff: **2026-10-27T01:36:31.145Z**. Source coverage: 2026-10-16 through 2026-10-27T01:36:31.145Z.
+Cutoff: **2026-10-28T14:50:25.537Z**. Source coverage: 2026-10-16 through 2026-10-28T14:50:25.537Z.
 
 [운영·사용법·장기 통계](HANDOFF.md)
 
+주의: `doda`의 생성 TPS는 버퍼링 또는 계측 영향으로 실제 스트리밍 속도를 나타내지 않을 수 있습니다. Fast 설정 관측은 운영 문서를 참고하세요.
+
 ![Coding agent pulse](report.svg)
 
-Successful timed responses: **49,892** across **1,155** sessions. Excluded: errors 999, aborted 80, other/invalid timing or output 0. Generation-eligible: 49,892.
+Successful timed responses: **55,179** across **1,332** sessions. Excluded: errors 1,036, aborted 104, other/invalid timing or output 0. Generation-eligible: 55,179.
 
 | Provider / model / tier | n | Sessions | Gen TPS | E2E TPS | TTFT median ms |
 |---|---:|---:|---:|---:|---:|
-| openai-codex / gpt-6-astra / default | 6595 | 55 | 26.78 | 22.71 | 2,955.69 |
+| doda / gpt-5.4-mini / unknown | 0 | 0 | — | — | — |
+| doda / gpt-6-luna / unknown | 54 | 1 | 1,323.46 | 30.56 | 4,652.65 |
+| doda / gpt-6.1-sol / unknown | 87 | 5 | 98.68 | 29.38 | 9,230.80 |
+| doda / gpt-6.1-terra / unknown | 3213 | 111 | 232.58 | 52.78 | 5,940.60 |
+| openai-codex / gpt-6-astra / default | 6759 | 57 | 26.80 | 22.72 | 2,936.05 |
 | openai-codex / gpt-6-astra / priority | 1425 | 18 | 32.49 | 28.81 | 2,312.76 |
 | openai-codex / gpt-6-astra / unknown | 0 | 0 | — | — | — |
-| openai-codex / gpt-6-luna / default | 4479 | 233 | 99.76 | 86.72 | 1,939.82 |
+| openai-codex / gpt-6-luna / default | 4073 | 214 | 99.81 | 86.83 | 1,956.09 |
 | openai-codex / gpt-6-luna / priority | 723 | 36 | 95.61 | 81.98 | 1,968.76 |
 | openai-codex / gpt-6-luna / unknown | 0 | 0 | — | — | — |
-| openai-codex / gpt-6.1-sol / default | 32986 | 759 | 35.11 | 28.79 | 2,635.60 |
+| openai-codex / gpt-6.1-sol / default | 30291 | 694 | 33.82 | 28.06 | 2,725.72 |
 | openai-codex / gpt-6.1-sol / priority | 3625 | 88 | 45.53 | 38.54 | 1,777.30 |
 | openai-codex / gpt-6.1-sol / unknown | 0 | 0 | — | — | — |
-| openai-codex / gpt-6.1-terra / default | 59 | 3 | 86.06 | 26.99 | 2,048.71 |
+| openai-codex / gpt-6.1-terra / default | 4929 | 148 | 80.08 | 48.35 | 2,462.52 |
 | openai-codex / gpt-6.1-terra / unknown | 0 | 0 | — | — | — |
 
 ## Fast comparison · matched 3-hour buckets
@@ -39,6 +45,10 @@ Priority and default are compared only within the same provider/model and bucket
 
 | Provider / model | Tier | Matched buckets | n | Sessions | Gen TPS | E2E TPS | TTFT ms | Input median | Context median | Output median |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| doda / gpt-5.4-mini | Not comparable | 0 | — | — | — | — | — | — | — | — |
+| doda / gpt-6-luna | Not comparable | 0 | — | — | — | — | — | — | — | — |
+| doda / gpt-6.1-sol | Not comparable | 0 | — | — | — | — | — | — | — | — |
+| doda / gpt-6.1-terra | Not comparable | 0 | — | — | — | — | — | — | — | — |
 | openai-codex / gpt-6-astra | priority | 4 | 1425 | 18 | 32.49 | 28.81 | 2,312.76 | 1,727.00 | 132,005.00 | 473.00 |
 | openai-codex / gpt-6-astra | default | 4 | 4399 | 45 | 27.36 | 23.05 | 3,021.72 | 1,241.00 | 119,404.00 | 352.00 |
 | openai-codex / gpt-6-luna | priority | 5 | 723 | 36 | 95.61 | 81.98 | 1,968.76 | 5,958.00 | 98,320.00 | 644.00 |

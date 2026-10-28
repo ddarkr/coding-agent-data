@@ -4,7 +4,7 @@
 <style>:root{--bg:#ffffff;--text:#172033;--muted:#667085;--grid:#e4e8ed;--axis:#98a2b3;--font:ui-sans-serif,system-ui,-apple-system,sans-serif;--series0:#087c92;--series1:#8b6227;--series2:#087f5b;--series3:#6d3be8;--series4:#b42363;--series5:#a85d08;--series6:#2458c4;--series7:#326f61}@media(prefers-color-scheme:dark){:root{--bg:#0b1016;--text:#e8edf2;--muted:#96a2af;--grid:#2b333d;--axis:#596574;--series0:#24d5f5;--series1:#d8c090;--series2:#35d996;--series3:#af92ff;--series4:#f28ab9;--series5:#edb76c;--series6:#88aaff;--series7:#84d1c0}}text{font-family:var(--font);fill:var(--text);font-variant-numeric:tabular-nums}.muted{fill:var(--muted)}.grid{stroke:var(--grid);stroke-width:0.8}.line{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}</style>
 <rect width="1000" height="640" fill="var(--bg)"/>
 <text x="68" y="36" font-size="26" font-weight="650">일반 vs Fast</text>
-<text x="68" y="62" font-size="13" class="muted">10.21 — 10.27 · 2026-10-27 10:36 KST 기준</text>
+<text x="68" y="62" font-size="13" class="muted">10.22 — 10.28 · 2026-10-28 23:50 KST 기준</text>
 <rect x="68" y="90" width="18" height="9" rx="3" fill="var(--muted)" fill-opacity=".6"/>
 <text x="94" y="100" font-size="13">일반 · default</text>
 <rect x="244" y="90" width="18" height="9" rx="3" fill="var(--series0)"/>

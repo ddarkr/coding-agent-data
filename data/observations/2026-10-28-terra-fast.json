@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "cutoff_utc": "2026-10-28T14:50:25.537Z",
+  "provider": "doda",
+  "model": "gpt-6.1-terra",
+  "setting_time_utc": "2026-10-28T14:40:43.240Z",
+  "source_archive": {
+    "asset": "2026-10-28.2799118e9eb5a326fef2989fe33350fc96601dc23be264faf82c8282671f90b3.jsonl.gz",
+    "bytes": 504140,
+    "day": "2026-10-28",
+    "release_tag": "data-2026-10",
+    "rows": 4941,
+    "sha256": "2799118e9eb5a326fef2989fe33350fc96601dc23be264faf82c8282671f90b3"
+  },
+  "classification": {
+    "requested_tier_after": "priority",
+    "requested_tier_before": "unknown",
+    "served_tier": "unknown",
+    "basis": "Session-branch ancestor tier-change timestamp must precede request start; in-flight request begun before the change is classified before. The request-setting events are not preserved in the daily archive."
+  },
+  "equal_window_seconds": 582.297,
+  "same_session_comparison": [
+    {
+      "window": "before",
+      "start_kst": "2026-10-28T23:31:00.943+09:00",
+      "end_kst": "2026-10-28T23:40:43.240+09:00",
+      "n": 23,
+      "sessions": 1,
+      "output_tokens": 27227,
+      "duration_ms": 446801.3165820001,
+      "e2e_tps": 60.93760020289267,
+      "ttft_median_ms": 10109.394333000062,
+      "duration_median_ms": 13544.912708000047,
+      "output_median_tokens": 828,
+      "context_median_tokens": 253453,
+      "near_first_last": 7,
+      "ttft_gt_10s": 13,
+      "errors": 0,
+      "aborted": 0
+    },
+    {
+      "window": "fast_setting",
+      "start_kst": "2026-10-28T23:40:43.240+09:00",
+      "end_kst": "2026-10-28T23:50:25.537+09:00",
+      "n": 22,
+      "sessions": 1,
+      "output_tokens": 35195,
+      "duration_ms": 420341.5062920004,
+      "e2e_tps": 83.729537704875,
+      "ttft_median_ms": 8785.533271000022,
+      "duration_median_ms": 14253.069624500116,
+      "output_median_tokens": 1122.0,
+      "context_median_tokens": 334742.5,
+      "near_first_last": 7,
+      "ttft_gt_10s": 7,
+      "errors": 0,
+      "aborted": 4
+    }
+  ],
+  "five_minute_buckets": [
+    {
+      "setting": "unknown",
+      "slot": "2026-10-28T23:30:00+09:00",
+      "n": 9,
+      "e2e_tps": 46.37267649008268,
+      "ttft_s": 8.675820791000035,
+      "near_first_last": 6,
+      "aborted": 0
+    },
+    {
+      "setting": "unknown",
+      "slot": "2026-10-28T23:35:00+09:00",
+      "n": 9,
+      "e2e_tps": 64.35881286070375,
+      "ttft_s": 10.93005704100011,
+      "near_first_last": 0,
+      "aborted": 0
+    },
+    {
+      "setting": "priority",
+      "slot": "2026-10-28T23:40:00+09:00",
+      "n": 6,
+      "e2e_tps": 82.01527843863883,
+      "ttft_s": 8.740337020999984,
+      "near_first_last": 2,
+      "aborted": 1
+    },
+    {
+      "setting": "unknown",
+      "slot": "2026-10-28T23:40:00+09:00",
+      "n": 5,
+      "e2e_tps": 69.22267466575097,
+      "ttft_s": 9.690522208000068,
+      "near_first_last": 1,
+      "aborted": 0
+    },
+    {
+      "setting": "priority",
+      "slot": "2026-10-28T23:45:00+09:00",
+      "n": 15,
+      "e2e_tps": 84.85758357556969,
+      "ttft_s": 8.704315084000118,
+      "near_first_last": 5,
+      "aborted": 1
+    },
+    {
+      "setting": "priority",
+      "slot": "2026-10-28T23:50:00+09:00",
+      "n": 1,
+      "e2e_tps": 81.34801778932936,
+      "ttft_s": 11.288403958000243,
+      "near_first_last": 0,
+      "aborted": 2
+    }
+  ],
+  "other_fast_setting_session": {
+    "successful": 17,
+    "near_first_last": 16,
+    "included_in_same_session_comparison": false
+  },
+  "limitations": [
+    "Observed setting is not proof of served tier; before tier is unknown.",
+    "One session, different output lengths and contexts; observational, not causal.",
+    "Buffered or near-instant first-to-last output makes generation TPS unreliable.",
+    "Failed or aborted responses are excluded from TPS."
+  ]
+}
