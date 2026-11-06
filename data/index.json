@@ -1,4 +1,10 @@
 {
+  "aggregate_snapshot": {
+    "days": 7,
+    "path": "data/latest-report.json",
+    "sha256": "4ee5ba2a9ca8797efc442cb6ceeeb00fa91a44cf090855ec24a3545528ce7af5",
+    "source_cutoff": "2026-11-05T18:30:39.094Z"
+  },
   "archives": [
     {
       "asset": "2026-10-16.bf64b653395c9d1396503cb0e7cdeb2e19445d26e285a680545925b5df125d62.jsonl.gz",

@@ -116,7 +116,8 @@ def validate_sample(row: dict, day: str | None = None):
 
 
 def validate_index(index: dict):
-    exact_keys(index, {"schema_version", "metric_version", "timezone", "since", "source_cutoff", "scan", "archives"}, "index")
+    keys = {"schema_version", "metric_version", "timezone", "since", "source_cutoff", "scan", "archives"}
+    exact_keys(index, keys | ({"aggregate_snapshot"} if "aggregate_snapshot" in index else set()), "index")
     if index["schema_version"] != SCHEMA_VERSION or index["metric_version"] != METRIC_VERSION:
         raise ValueError("Unsupported index schema/metric version; explicit migration required")
     if index["timezone"] != "Asia/Seoul":
@@ -145,6 +146,13 @@ def validate_index(index: dict):
             raise ValueError("Archive compressed size out of bounds")
         if type(entry["rows"]) is not int or entry["rows"] < 1:
             raise ValueError("Invalid archive row count")
+    if "aggregate_snapshot" in index:
+        snapshot = index["aggregate_snapshot"]
+        exact_keys(snapshot, {"path", "sha256", "source_cutoff", "days"}, "aggregate snapshot")
+        if (snapshot["path"] != "data/latest-report.json" or not isinstance(snapshot["sha256"], str)
+                or not SHA.fullmatch(snapshot["sha256"]) or snapshot["days"] != 7
+                or parse_time(snapshot["source_cutoff"]) < cutoff):
+            raise ValueError("Invalid aggregate snapshot reference")
 
 
 def read_index(project: Path) -> dict:
@@ -427,6 +435,8 @@ def publish_archives(project: Path, repo: str, confirmed: bool) -> dict:
     if info.get("visibility") != "PRIVATE":
         raise ValueError("Measurement publication requires a private repository")
     index = read_index(project)
+    if 'aggregate_snapshot' in index:
+        raise ValueError('Aggregate-only index omits newer archives; collect locally before archive publication')
     # Validate all local bytes before any remote mutation.
     for entry in index["archives"]:
         load_archive(project, entry)
@@ -458,15 +468,58 @@ def publish_archives(project: Path, repo: str, confirmed: bool) -> dict:
     return {"uploaded": uploaded, "referenced_archives": len(index["archives"]), "git_changed": False}
 
 
+def load_aggregate_snapshot(project: Path, index: dict) -> dict:
+    reference = index['aggregate_snapshot']
+    path = project / reference['path']
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_ARCHIVE_BYTES:
+        raise ValueError('Aggregate snapshot is missing, unsafe, or exceeds size limit')
+    content = path.read_bytes()
+    if digest(content) != reference['sha256']:
+        raise ValueError('Aggregate snapshot SHA256 differs from index')
+    data = json.loads(content)
+    exact_keys(data, {'schema_version', 'metric_version', 'analysis_sha256', 'since', 'source_cutoff',
+                      'days', 'buckets', 'summary', 'groups', 'pairs', 'comparisons', 'monthly', 'monthly_files'}, 'aggregate snapshot')
+    if (data['schema_version'] != SCHEMA_VERSION or data['metric_version'] != METRIC_VERSION
+            or data['analysis_sha256'] != digest((project / 'analyze.py').read_bytes())
+            or data['since'] != index['since'] or data['source_cutoff'] != reference['source_cutoff']
+            or data['days'] != reference['days']):
+        raise ValueError('Aggregate snapshot metadata differs from the index or analysis code')
+    if (not isinstance(data['summary'], dict)
+            or any(not isinstance(data[key], list) for key in ('buckets', 'groups', 'pairs', 'comparisons', 'monthly'))
+            or len(data['buckets']) > data['days'] * 8 + 1 or len(data['monthly']) > 12):
+        raise ValueError('Malformed aggregate snapshot')
+    if not isinstance(data['monthly_files'], dict):
+        raise ValueError('Malformed monthly aggregate references')
+    monthly_dir = project / 'data' / 'monthly'
+    if monthly_dir.is_symlink() or {p.name for p in monthly_dir.glob('*.json')} != set(data['monthly_files']):
+        raise ValueError('Monthly aggregate files differ from snapshot')
+    for name, checksum in data['monthly_files'].items():
+        if (not isinstance(name, str) or not re.fullmatch(r'\d{4}-(0[1-9]|1[0-2])\.json', name)
+                or not isinstance(checksum, str) or not SHA.fullmatch(checksum)):
+            raise ValueError('Invalid monthly aggregate reference')
+        monthly_path = monthly_dir / name
+        if (monthly_path.is_symlink() or not monthly_path.is_file()
+                or monthly_path.stat().st_size > MAX_ARCHIVE_BYTES or digest(monthly_path.read_bytes()) != checksum):
+            raise ValueError('Monthly aggregate missing, unsafe, or differs from snapshot')
+    return data
+
+
 def validate_project(project: Path) -> dict:
     index = read_index(project)
+    if 'aggregate_snapshot' in index:
+        load_aggregate_snapshot(project, index)
     for path in sorted((project / "data/monthly").glob("*.json")):
+        if path.is_symlink():
+            raise ValueError('Unsafe monthly aggregate path')
         data = json.loads(path.read_text())
         if data.get("schema_version") != SCHEMA_VERSION or data.get("metric_version") != METRIC_VERSION:
             raise ValueError("Unsupported monthly aggregate version")
         if data.get("month") != path.stem or not isinstance(data.get("days"), dict):
             raise ValueError("Malformed monthly aggregate")
-    return {"archives": len(index["archives"]), "source_cutoff": index["source_cutoff"]}
+    result = {"archives": len(index["archives"]), "source_cutoff": index["source_cutoff"]}
+    if 'aggregate_snapshot' in index:
+        result['aggregate_cutoff'] = index['aggregate_snapshot']['source_cutoff']
+    return result
 
 
 def main(argv=None):
@@ -477,7 +530,7 @@ def main(argv=None):
     collection.add_argument("--omp-home", type=Path, default=Path.home() / ".omp")
     collection.add_argument("--since", default=None)
     collection.add_argument("--until", type=parse_time)
-    reporting = commands.add_parser("report", help="Rebuild reports from verified cached/Release archives")
+    reporting = commands.add_parser("report", help="Rebuild reports from verified archives or an aggregate snapshot")
     reporting.add_argument("--repo")
     reporting.add_argument("--rebuild", action="store_true")
     reporting.add_argument("--days", type=int, default=7)
@@ -731,10 +784,9 @@ def render_fast_svg(comparisons, cutoff, days=7):
         ]
         return '\n'.join(svg) + '\n'
     maximum, tick_step = _nice_svg_scale(max(
-        row[field] for _, values in pairs for row in values.values()
-        for field in ('generation_tps', 'e2e_tps') if row[field] is not None))
-    columns = [('generation_tps', '생성 TPS', 350, 595, 635),
-               ('e2e_tps', '대기 포함 TPS', 700, 915, 960)]
+        row['e2e_tps'] for _, values in pairs for row in values.values()
+        if row['e2e_tps'] is not None))
+    columns = [('e2e_tps', '대기 포함 TPS', 350, 915, 960)]
     plot_bottom = 190 + len(pairs) * 126 - 18
     for field, title, left, right, value_x in columns:
         svg.append(f'<text x="{left}" y="139" font-size="16" font-weight="600">{title}</text>')
@@ -788,7 +840,7 @@ def render_svg(bucket_rows, cutoff):
     if not ordered:
         ordered = [dict(start=cutoff.replace(hour=0, minute=0, second=0, microsecond=0).isoformat(), groups=[])]
     series = sorted({_report_key(g) for b in ordered for g in b['groups']
-                     if g['generation_tps'] is not None})
+                     if g['e2e_tps'] is not None})
     tier_names = {'default': '일반', 'priority': 'Fast', 'unknown': '미상'}
     def model_color(model):
         for index, fragment in enumerate(('sol', 'luna', 'astra', 'step')):
@@ -812,15 +864,15 @@ def render_svg(bucket_rows, cutoff):
     last = max(starts[-1] + timedelta(hours=3), first + timedelta(hours=3))
     x = lambda t: left + (t - first).total_seconds() / (last - first).total_seconds() * (right - left)
     maximum, speed_step = _nice_svg_scale(max(
-        [g['generation_tps'] for b in ordered for g in b['groups'] if g['generation_tps'] is not None] or [1]))
+        [g['e2e_tps'] for b in ordered for g in b['groups'] if g['e2e_tps'] is not None] or [1]))
     y = lambda value: bottom - value / maximum * plot_height
     counts = [sum(g['n'] for g in b['groups']) for b in ordered]
     count_max, count_step = _nice_svg_scale(max(counts or [0]), divisions=3, integral=True)
 
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="{height}" viewBox="0 0 1000 {height}" style="max-width:100%;height:auto" role="img" aria-labelledby="title desc">',
-        '<title id="title">Coding agent generation speed by model and service tier</title>',
-        '<desc id="desc">Three-hour KST buckets, separated by provider, model and service tier. Solid lines are default, dashed lines priority, dotted lines other tiers. Gaps mean no valid measurement. End labels show each series last valid observation.</desc>',
+        '<title id="title">Coding agent end-to-end throughput by model and service tier</title>',
+        '<desc id="desc">Three-hour KST buckets of output tokens divided by total request duration, separated by provider, model and service tier. Solid lines are default, dashed lines priority, dotted lines other tiers. Gaps mean no valid measurement. End labels show each series last valid observation.</desc>',
         '<defs>',
         '  <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">',
         '    <stop stop-color="var(--series0)" stop-opacity=".25"/>',
@@ -831,7 +883,7 @@ def render_svg(bucket_rows, cutoff):
         f'<rect width="1000" height="{height}" fill="var(--bg)"/>',
         '<text x="68" y="36" font-size="26" font-weight="650">모델별 처리 속도 · 일반 / Fast</text>',
         f'<text x="68" y="62" font-size="13" class="muted">{esc(first.strftime("%m.%d"))} — {esc(cutoff.strftime("%m.%d"))} · 3시간 집계 · {esc(cutoff.strftime("%Y-%m-%d %H:%M"))} KST 기준</text>',
-        '<text x="68" y="94" font-size="15" font-weight="600">생성 TPS <tspan font-size="12" font-weight="400" class="muted">· 첫 토큰 대기 제외</tspan></text>',
+        '<text x="68" y="94" font-size="15" font-weight="600">대기 포함 TPS <tspan font-size="12" font-weight="400" class="muted">· 출력 토큰 / 전체 요청시간</tspan></text>',
         '<path d="M410,90 H440" class="line" stroke="var(--text)"/>',
         '<text x="448" y="94" font-size="12" class="muted">일반 · default</text>',
         '<path d="M575,90 H605" class="line" stroke="var(--text)" stroke-dasharray="8,5"/>',
@@ -854,7 +906,7 @@ def render_svg(bucket_rows, cutoff):
         runs, current = [], []
         for bucket, stamp in zip(ordered, starts):
             group = next((g for g in bucket['groups'] if _report_key(g) == model), None)
-            value = group['generation_tps'] if group else None
+            value = group['e2e_tps'] if group else None
             if value is None:
                 if current:
                     runs.append(current)
@@ -889,9 +941,13 @@ def render_svg(bucket_rows, cutoff):
         else:
             mx = (xx + guide_x) / 2
             svg.append(f'<path d="M{xx:.2f},{yy:.2f} C{mx:.2f},{yy:.2f} {mx:.2f},{label_y:.2f} {guide_x},{label_y:.2f}" fill="none" stroke="{color}" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="3,3"/>')
-        name = model[1] if len(model[1]) <= 18 else model[1][:16] + '…'
-        name += ' · ' + tier_names.get(model[2], model[2])
-        svg.append(f'<text x="{text_x}" y="{label_y + 5:.2f}" font-size="14" font-weight="600" style="fill:{color}">{esc(name)}<title>{esc(" / ".join(model))}</title></text>')
+        provider = 'codex' if model[0] == 'openai-codex' else model[0]
+        provider = provider if len(provider) <= 8 else provider[:7] + '…'
+        suffix = ' · ' + tier_names.get(model[2], model[2])
+        available = max(2, 30 - len(provider) - len(suffix) - 3)
+        model_name = model[1] if len(model[1]) <= available else model[1][:available-1] + '…'
+        name = f'{provider} / {model_name}{suffix}'
+        svg.append(f'<text x="{text_x}" y="{label_y + 5:.2f}" font-size="12" font-weight="600" style="fill:{color}">{esc(name)}<title>{esc(" / ".join(model))}</title></text>')
         svg.append(f'<text x="970" y="{label_y + 5:.2f}" text-anchor="end" font-size="15" font-weight="650" style="fill:{color}">{value:.1f}</text>')
 
     # Lower panel header
@@ -958,17 +1014,71 @@ def _report_number(value):
     return '—' if value is None else f'{value:,.2f}'
 
 
+def render_report_snapshot(project, data, narrative, handoff_narrative, rebuilt_days=0, reused_days=0):
+    cutoff = parse_time(data['source_cutoff'])
+    days, summary, comparisons = data['days'], data['summary'], data['comparisons']
+    lines = [f'## Latest {days} KST dates', '',
+             f'Cutoff: **{_report_md(data["source_cutoff"])}**. Source coverage: {_report_md(data["since"])} through {_report_md(data["source_cutoff"])}.', '',
+             '[운영·사용법·장기 통계](HANDOFF.md)', '',
+             'TPS는 출력 토큰을 전체 요청시간으로 나눈 대기 포함 처리량입니다. 실제 생성 속도와는 다르며, 미상은 응답 tier 미기록을 뜻합니다.', '',
+             '![Coding agent pulse](report.svg)', '',
+             f'Successful timed responses: **{summary["n"]:,}** across **{summary["sessions"]:,}** sessions. Excluded: errors {summary["errors"]:,}, aborted {summary["aborted"]:,}, other/invalid timing or output {summary["invalid"]:,}.', '',
+             '| Provider / model / tier | n | Sessions | E2E TPS | TTFT median ms |', '|---|---:|---:|---:|---:|']
+    for group in data['groups']:
+        lines.append('| '+_report_md(' / '.join(_report_key(group)))+' | '+ ' | '.join(
+            str(group[k]) if k in ('n','sessions') else _report_number(group[k])
+            for k in ('n','sessions','e2e_tps','ttft_median_ms'))+' |')
+    lines += ['', '## Fast comparison · matched 3-hour buckets', '',
+              'Priority and default are compared only within the same provider/model and buckets containing valid timed responses from both tiers. Unknown/auto/flex/scale are not default. Observational, not causal; workload and session differences remain. Fewer than 30 responses or 5 sessions per tier is a tiny sample.', '',
+              '![일반과 Fast 비교](fast-comparison.svg)', '',
+              '<details>', '<summary>표본·TTFT·토큰 길이 상세</summary>', '',
+              '| Provider / model | Tier | Matched buckets | n | Sessions | E2E TPS | TTFT ms | Input median | Context median | Output median |',
+              '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|']
+    for pair in data['pairs']:
+        rows = [r for r in comparisons if [r['provider'], r['model']] == list(pair)]
+        if not rows:
+            lines.append('| '+_report_md(' / '.join(pair))+' | Not comparable | 0 | — | — | — | — | — | — | — |')
+            continue
+        for row in rows:
+            warning = ' ⚠ tiny sample' if row['n'] < 30 or row['sessions'] < 5 else ''
+            lines.append('| '+_report_md(' / '.join(pair))+' | '+row['tier']+warning+' | '+str(row['matched_buckets'])+' | '+' | '.join(
+                str(row[k]) if k in ('n','sessions') else _report_number(row[k])
+                for k in ('n','sessions','e2e_tps','ttft_median_ms','input_median_tokens','context_median_tokens','output_median_tokens'))+' |')
+    lines += ['', '</details>', '']
+    begin, end = '<!-- REPORT:START -->', '<!-- REPORT:END -->'
+    replacement = begin+'\n\n'+'\n'.join(lines)+'\n'+end
+    updated = narrative[:narrative.index(begin)] + replacement + narrative[narrative.index(end)+len(end):]
+    lines = ['', '### Twelve-month daily trend', '',
+             'Calendar-month summary of direct daily aggregates; rates below are ratios of summed eligible tokens/time, never averaged TPS or medians. Absent dates remain unobserved, not zero.', '',
+             '| Month | Observed dates | Successful | E2E TPS | Errors / aborted / invalid |', '|---|---:|---:|---:|---|']
+    for row in data['monthly']:
+        lines.append(f'| {row["month"]} | {row["observed"]} | {row["n"]} | {_report_number(row["e2e_tps"])} | {row["errors"]} / {row["aborted"]} / {row["invalid"]} |')
+    lines += ['', 'Timing is local client-observed. E2E TPS is total output tokens divided by total request duration, not a direct measurement of generation speed. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.', '']
+    begin, end = '<!-- HISTORY:START -->', '<!-- HISTORY:END -->'
+    replacement = begin+'\n\n'+'\n'.join(lines)+'\n'+end
+    updated_handoff = handoff_narrative[:handoff_narrative.index(begin)] + replacement + handoff_narrative[handoff_narrative.index(end)+len(end):]
+    _report_text(project/'report.svg', render_svg(data['buckets'], cutoff))
+    _report_text(project/'fast-comparison.svg', render_fast_svg(comparisons, cutoff, days))
+    _report_text(project/'README.md', updated)
+    _report_text(project/'HANDOFF.md', updated_handoff)
+    return dict(rebuilt_days=rebuilt_days, reused_days=reused_days, normal_responses=summary['n'],
+                cutoff=iso_utc(cutoff), comparison=comparisons, **{k:v for k,v in summary.items() if k!='n'})
+
+
 def build_report(project, repo=None, rebuild=False, days=7, until=None):
     project = Path(project)
     if isinstance(days, bool) or not isinstance(days, int) or days < 1:
         raise ValueError('days must be a positive integer')
     index = read_index(project)
-    canonical_cutoff = parse_time(index['source_cutoff'])
+    reference = index.get('aggregate_snapshot')
+    canonical_cutoff = parse_time(reference['source_cutoff'] if reference else index['source_cutoff'])
     cutoff = until if until is not None else canonical_cutoff
     if cutoff.tzinfo is None or cutoff > canonical_cutoff:
         raise ValueError('report cutoff must be aware and not exceed source_cutoff')
     if cutoff < parse_time(index['since'] + 'T00:00:00+09:00'):
         raise ValueError('report cutoff precedes coverage')
+    if reference and (rebuild or days != reference['days'] or cutoff != canonical_cutoff):
+        raise ValueError('Aggregate-only publication supports its latest 7-day snapshot; use local archives for other reports')
     readme = project / 'README.md'
     narrative = readme.read_text(encoding='utf-8')
     begin, end = '<!-- REPORT:START -->', '<!-- REPORT:END -->'
@@ -981,10 +1091,14 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
         or handoff_narrative.index(history_begin) >= handoff_narrative.index(history_end)):
         raise ValueError('HANDOFF requires exactly one ordered HISTORY marker pair')
     analysis_hash = hashlib.sha256((project / 'analyze.py').read_bytes()).hexdigest()
+    if reference:
+        return render_report_snapshot(project, load_aggregate_snapshot(project, index), narrative, handoff_narrative)
     monthly_dir = project / 'data' / 'monthly'
     monthly_dir.mkdir(parents=True, exist_ok=True)
     existing = {}
     for path in sorted(monthly_dir.glob('*.json')):
+        if path.is_symlink():
+            raise ValueError('Unsafe monthly aggregate path')
         try:
             data = json.loads(path.read_text(encoding='utf-8'))
             if data.get('schema_version') != SCHEMA_VERSION or data.get('metric_version') != METRIC_VERSION:
@@ -1044,39 +1158,17 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
     while stamp < local_cutoff:
         buckets.append(dict(start=stamp.isoformat(), groups=_report_groups(bucket_samples.get(stamp, []))))
         stamp += timedelta(hours=3)
-    svg = render_svg(buckets, cutoff)
     summary = summarize_samples(recent)
-    lines = [f'## Latest {days} KST dates', '', f'Cutoff: **{_report_md(iso_utc(cutoff))}**. Source coverage: {index["since"]} through {_report_md(index["source_cutoff"])}.', '',
-             '[운영·사용법·장기 통계](HANDOFF.md)', '',
-             '주의: `doda`의 생성 TPS는 버퍼링 또는 계측 영향으로 실제 스트리밍 속도를 나타내지 않을 수 있습니다. Fast 설정 관측은 운영 문서를 참고하세요.', '',
-             '![Coding agent pulse](report.svg)', '',
-             f'Successful timed responses: **{summary["n"]:,}** across **{summary["sessions"]:,}** sessions. Excluded: errors {summary["errors"]:,}, aborted {summary["aborted"]:,}, other/invalid timing or output {summary["invalid"]:,}. Generation-eligible: {summary["generation_n"]:,}.', '',
-             '| Provider / model / tier | n | Sessions | Gen TPS | E2E TPS | TTFT median ms |', '|---|---:|---:|---:|---:|---:|']
-    for group in _report_groups(recent):
-        lines.append('| '+_report_md(' / '.join(_report_key(group)))+' | '+ ' | '.join(str(group[k]) if k in ('n','sessions') else _report_number(group[k]) for k in ('n','sessions','generation_tps','e2e_tps','ttft_median_ms'))+' |')
-    lines += ['', '## Fast comparison · matched 3-hour buckets', '',
-              'Priority and default are compared only within the same provider/model and buckets containing valid timed responses from both tiers. Unknown/auto/flex/scale are not default. Observational, not causal; workload and session differences remain. Fewer than 30 responses or 5 sessions per tier is a tiny sample.', '',
-              '![일반과 Fast 비교](fast-comparison.svg)', '',
-              '<details>', '<summary>표본·TTFT·토큰 길이 상세</summary>', '',
-              '| Provider / model | Tier | Matched buckets | n | Sessions | Gen TPS | E2E TPS | TTFT ms | Input median | Context median | Output median |',
-              '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+    groups = _report_groups(recent)
     pairs = sorted({(r['provider'],r['model']) for r in recent})
     comparisons = []
     for pair in pairs:
         candidates = [r for r in recent if (r['provider'],r['model']) == pair]
         tier_buckets = {tier: {_report_bucket(r) for r in candidates if r['tier']==tier and summarize_samples([r])['n']} for tier in ('priority','default')}
         overlap = tier_buckets['priority'] & tier_buckets['default']
-        if not overlap:
-            lines.append('| '+_report_md(' / '.join(pair))+' | Not comparable | 0 | — | — | — | — | — | — | — | — |')
-            continue
-        for tier in ('priority','default'):
+        for tier in ('priority','default') if overlap else ():
             stats = summarize_samples(r for r in candidates if r['tier']==tier and _report_bucket(r) in overlap)
-            warning = ' ⚠ tiny sample' if stats['n'] < 30 or stats['sessions'] < 5 else ''
             comparisons.append(dict(provider=pair[0],model=pair[1],tier=tier,matched_buckets=len(overlap),**stats))
-            lines.append('| '+_report_md(' / '.join(pair))+' | '+tier+warning+' | '+str(len(overlap))+' | '+' | '.join(str(stats[k]) if k in ('n','sessions') else _report_number(stats[k]) for k in ('n','sessions','generation_tps','e2e_tps','ttft_median_ms','input_median_tokens','context_median_tokens','output_median_tokens'))+' |')
-    lines += ['', '</details>', '']
-    report_lines = lines
-    lines = []
     # Twelve calendar months, with daily rates taken from direct per-day populations.
     month_number = local_cutoff.year * 12 + local_cutoff.month - 1
     first_number = month_number - 11
@@ -1091,30 +1183,23 @@ def build_report(project, repo=None, rebuild=False, days=7, until=None):
                     trend_days[day] = _report_groups(rows)
                 else:
                     trend_days[day] = data['daily']
-    lines += ['', '### Twelve-month daily trend', '',
-              'Calendar-month summary of direct daily aggregates; rates below are ratios of summed eligible tokens/time, never averaged TPS or medians. Absent dates remain unobserved, not zero.', '',
-              '| Month | Observed dates | Successful | Gen TPS | E2E TPS | Errors / aborted / invalid |', '|---|---:|---:|---:|---:|---|']
-    for number in range(first_number,month_number+1):
+    monthly = []
+    for number in range(first_number, month_number+1):
         month = f'{number//12:04d}-{number%12+1:02d}'
         observed = [v for day,v in trend_days.items() if day.startswith(month)]
         values = [g for groups in observed for g in groups]
-        totals = {k:sum(g[k] for g in values) for k in ('n','generation_output_tokens','generation_ms','output_tokens','duration_ms','errors','aborted','invalid')}
-        gen = totals['generation_output_tokens']*1000/totals['generation_ms'] if totals['generation_ms'] else None
+        totals = {k:sum(g[k] for g in values) for k in ('n','output_tokens','duration_ms','errors','aborted','invalid')}
         e2e = totals['output_tokens']*1000/totals['duration_ms'] if totals['duration_ms'] else None
-        lines.append(f'| {month} | {len(observed)} | {totals["n"]} | {_report_number(gen)} | {_report_number(e2e)} | {totals["errors"]} / {totals["aborted"]} / {totals["invalid"]} |')
-    lines += ['', 'Timing is local client-observed. TTFT must be finite and 0 ≤ TTFT < duration for generation TPS; otherwise the response can remain E2E-valid. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.', '']
-    replacement = begin+'\n\n'+'\n'.join(report_lines)+'\n'+end
-    updated = narrative[:narrative.index(begin)] + replacement + narrative[narrative.index(end)+len(end):]
-    history_replacement = history_begin+'\n\n'+'\n'.join(lines)+'\n'+history_end
-    updated_handoff = (handoff_narrative[:handoff_narrative.index(history_begin)]
-                       + history_replacement
-                       + handoff_narrative[handoff_narrative.index(history_end)+len(history_end):])
-    _report_text(project/'report.svg', svg)
-    _report_text(project/'fast-comparison.svg', render_fast_svg(comparisons, cutoff, days))
-    _report_text(readme, updated)
-    _report_text(handoff, updated_handoff)
-    return dict(rebuilt_days=rebuilt_days,reused_days=reused_days,normal_responses=summary['n'],
-                cutoff=iso_utc(cutoff),comparison=comparisons,**{k:v for k,v in summary.items() if k!='n'})
+        monthly.append(dict(month=month, observed=len(observed), e2e_tps=e2e,
+                            **{k:totals[k] for k in ('n','errors','aborted','invalid')}))
+    monthly_files = {month+'.json': digest((monthly_dir/(month+'.json')).read_bytes()) for month in months}
+    snapshot = dict(schema_version=SCHEMA_VERSION, metric_version=METRIC_VERSION, analysis_sha256=analysis_hash,
+                    since=index['since'], source_cutoff=iso_utc(cutoff), days=days, buckets=buckets,
+                    summary=summary, groups=groups, pairs=pairs, comparisons=comparisons, monthly=monthly,
+                    monthly_files=monthly_files)
+    if until is None and days == 7:
+        write_json(project/'data/latest-report.json', snapshot)
+    return render_report_snapshot(project, snapshot, narrative, handoff_narrative, rebuilt_days, reused_days)
 
 class CollectorTests(unittest.TestCase):
     def setUp(self):
@@ -1252,6 +1337,14 @@ class CollectorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             publish_archives(self.project, "owner/repo", False)
 
+    def test_aggregate_index_cannot_publish_incomplete_archives(self):
+        with patch('subprocess.check_output', return_value=b'{"visibility":"PRIVATE"}'), \
+             patch.dict(publish_archives.__globals__, read_index=lambda p:{'aggregate_snapshot':{}}), \
+             patch('subprocess.run') as upload:
+            with self.assertRaises(ValueError):
+                publish_archives(self.project, 'owner/repo', True)
+            upload.assert_not_called()
+
     def test_hash_mismatch_and_discarding_coverage_are_not_silent(self):
         self.save(self.source, [self.entry()])
         self.run_collect()
@@ -1359,16 +1452,58 @@ class ReportTests(unittest.TestCase):
                 build_report(project)
                 self.assertFalse(monthly.exists())
 
+    def test_public_snapshot_renders_without_private_archives_and_rejects_tampering(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            (project/'analyze.py').write_text('# fixture\n')
+            (project/'README.md').write_text('<!-- REPORT:START --><!-- REPORT:END -->')
+            (project/'HANDOFF.md').write_text('<!-- HISTORY:START --><!-- HISTORY:END -->')
+            cutoff = parse_time('2026-10-22T03:00:00+09:00')
+            manifest = dict(since='2026-10-16',source_cutoff=iso_utc(cutoff),
+                            archives=[dict(day='2026-10-22',sha256='c'*64)])
+            row = self.sample(tier='unknown',ttft_ms=1999.999)
+            with patch.dict(build_report.__globals__, read_index=lambda p:manifest, load_archive=lambda p,e,r:[row]):
+                build_report(project)
+            snapshot = project/'data/latest-report.json'
+            manifest['aggregate_snapshot'] = dict(path='data/latest-report.json',sha256=digest(snapshot.read_bytes()),
+                                                  source_cutoff=iso_utc(cutoff),days=7)
+            def no_archives(*args):
+                self.fail('public aggregate report must not read private archives')
+            (project/'report.svg').unlink()
+            with patch.dict(build_report.__globals__, read_index=lambda p:manifest, load_archive=no_archives):
+                result = build_report(project)
+                tree = ET.fromstring((project/'report.svg').read_text())
+                point = tree.find('.//{http://www.w3.org/2000/svg}circle[@data-tier="unknown"]')
+                self.assertEqual(float(point.attrib['data-value']), 50)
+                self.assertEqual(result['normal_responses'], 1)
+                with self.assertRaises(ValueError):
+                    build_report(project, days=1)
+                monthly = project/'data/monthly/2026-10.json'
+                original = monthly.read_bytes()
+                monthly.write_bytes(original+b' ')
+                with self.assertRaises(ValueError):
+                    build_report(project)
+                monthly.write_bytes(original)
+                monthly.unlink()
+                monthly.symlink_to(snapshot)
+                with self.assertRaises(ValueError):
+                    build_report(project)
+                monthly.unlink()
+                monthly.write_bytes(original)
+                snapshot.write_bytes(snapshot.read_bytes()+b' ')
+                with self.assertRaises(ValueError):
+                    build_report(project)
+
     def test_svg_preserves_tier_rates_and_distinguishes_fast(self):
         rows = [self.sample(model='gpt-sol'),
                 self.sample(model='gpt-sol', tier='priority', output_tokens=200),
-                self.sample(model='gpt-sol', tier='unknown', output_tokens=50)]
+                self.sample(model='gpt-sol', tier='unknown', output_tokens=50, ttft_ms=1999.999)]
         buckets = _report_day(rows,'c'*64)['buckets']
         tree = ET.fromstring(render_svg(buckets,parse_time('2026-10-22T03:00:00+09:00')))
         namespace = {'s':'http://www.w3.org/2000/svg'}
         points = tree.findall('.//s:circle[@data-tier]',namespace)
         self.assertEqual({node.attrib['data-tier']:float(node.attrib['data-value']) for node in points},
-                         {'default':100, 'priority':200, 'unknown':50})
+                         {'default':50, 'priority':100, 'unknown':25})
         lines = {node.attrib['data-tier']:node for node in tree.findall('.//s:path[@data-tier]',namespace)}
         self.assertFalse(lines['default'].attrib['stroke-dasharray'])
         self.assertTrue(lines['priority'].attrib['stroke-dasharray'])
@@ -1382,14 +1517,13 @@ class ReportTests(unittest.TestCase):
             cohorts.append(dict(provider='provider', model='model', tier=tier, matched_buckets=1, **stats))
         tree = ET.fromstring(render_fast_svg(cohorts, cutoff))
         namespace = {'s':'http://www.w3.org/2000/svg'}
-        for metric in ('generation_tps', 'e2e_tps'):
-            bars = tree.findall(f'.//s:rect[@data-metric="{metric}"]', namespace)
-            by_tier = {bar.attrib['data-tier']: bar for bar in bars}
-            self.assertEqual(set(by_tier), {'default', 'priority'})
-            self.assertAlmostEqual(float(by_tier['priority'].attrib['width']) /
-                                   float(by_tier['default'].attrib['width']), 2, places=4)
-            for cohort in cohorts:
-                self.assertAlmostEqual(float(by_tier[cohort['tier']].attrib['data-value']), cohort[metric])
+        bars = tree.findall('.//s:rect[@data-metric="e2e_tps"]', namespace)
+        by_tier = {bar.attrib['data-tier']: bar for bar in bars}
+        self.assertEqual(set(by_tier), {'default', 'priority'})
+        self.assertAlmostEqual(float(by_tier['priority'].attrib['width']) /
+                               float(by_tier['default'].attrib['width']), 2, places=4)
+        for cohort in cohorts:
+            self.assertAlmostEqual(float(by_tier[cohort['tier']].attrib['data-value']), cohort['e2e_tps'])
 
     def test_fast_missing_tier_or_ttft_is_not_a_zero_bar(self):
         cutoff = parse_time('2026-10-22T03:00:00+09:00')
@@ -1401,7 +1535,7 @@ class ReportTests(unittest.TestCase):
         fast = dict(provider='provider', model='model', tier='priority', matched_buckets=1,
                     **summarize_samples([self.sample(tier='priority', ttft_ms=None)]))
         tree = ET.fromstring(render_fast_svg([standard, fast], cutoff))
-        self.assertEqual(len(tree.findall('.//s:rect[@data-metric="generation_tps"]', namespace)), 1)
+        self.assertEqual(len(tree.findall('.//s:rect[@data-metric="generation_tps"]', namespace)), 0)
         self.assertEqual(len(tree.findall('.//s:rect[@data-metric="e2e_tps"]', namespace)), 2)
 
     def test_cutoff_is_half_open_and_completed_boundary_inclusive(self):
