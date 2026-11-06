@@ -6,7 +6,7 @@
 
 ## 문서 역할
 
-- `README.md`에는 `Latest 7 KST dates`와 `Fast comparison · matched 3-hour buckets` 두 보고서 섹션만 둡니다. 각 섹션의 그래프·표본·상세표는 유지합니다.
+- `README.md`에는 별도 15분 관측과 `Latest 7 KST dates`, `Fast comparison · matched 3-hour buckets` 보고서 섹션을 둡니다. 각 섹션의 그래프·표본·상세표는 유지합니다.
 - 사용법, 저장 구조, 운영 안내, 주의사항과 장기 통계는 이 문서에 둡니다.
 - 에이전트는 작업 전에 `AGENTS.md`와 이 문서를 읽습니다. 요청 없는 commit/push, Release 업로드, 결제 설정 변경은 하지 않습니다.
 - `report`는 README의 `REPORT` 영역과 이 문서의 `HISTORY` 영역만 갱신합니다. 그 밖의 운영 메모는 보존합니다.
@@ -28,7 +28,7 @@ python3 analyze.py self-test
 
 - 로컬 원본 로그는 Mac에만 보존합니다. 대화 내용·도구 인자·계정·인증 정보·원시 식별자는 게시하지 않습니다.
 - `.cache/collector.sqlite3`는 변경된 파일을 찾는 로컬 상태입니다. 응답 내용이 바뀐 날짜만 다시 내보내며 삭제된 원본의 과거 측정값은 유지합니다.
-- `.cache/archives/YYYY-MM-DD.<SHA256>.jsonl.gz`는 허용 목록으로 정제한 응답별 숫자 측정값입니다. Git에 넣지 않습니다. 해시도 익명성의 보장은 아니므로 저장소는 비공개로 운영합니다.
+- `.cache/archives/YYYY-MM-DD.<SHA256>.jsonl.gz`는 허용 목록으로 정제한 응답별 숫자 측정값입니다. Git에 넣지 않습니다. 해시는 익명성을 보장하지 않습니다.
 - 월별 GitHub Release `data-YYYY-MM`에 내용 주소형 일별 아카이브를 보관합니다. 같은 날짜가 바뀌면 새 asset을 만들고 이전 파일은 자동 삭제하지 않습니다.
 - `data/index.json`은 스키마·계산 버전, 수집 기준 시각, 아카이브의 SHA-256·크기·행 수를 담습니다.
 - `data/monthly/YYYY-MM.json`은 일별·3시간별 집계와 입력 해시를 담습니다. 같은 입력은 재사용하고, 계산 코드가 바뀌면 다시 계산합니다.
@@ -36,9 +36,9 @@ python3 analyze.py self-test
 
 ## 원격 게시와 Actions
 
-비공개 저장소: https://github.com/ddarkr/coding-agent-data
+공개 저장소: https://github.com/ddarkr/coding-agent-data. 기존 Release의 응답별 아카이브도 공개되어 있습니다.
 
-추가 원격 변경은 사용자의 현재 요청에 근거해 수행합니다. 아카이브 업로드에는 별도 CLI 확인 플래그가 필요합니다.
+추가 원격 변경은 사용자의 현재 요청에 근거해 수행합니다. `publish-archives`는 비공개 저장소에만 업로드하며 별도 CLI 확인 플래그가 필요합니다. 2026-11-06 관측은 응답별 아카이브 없이 집계와 그래프만 게시했습니다.
 
 1. 로컬 수집·리포트·검증을 완료합니다. 원본 로그와 `.cache`는 추적하지 않습니다.
 2. 승인된 아카이브 업로드를 실행합니다.
