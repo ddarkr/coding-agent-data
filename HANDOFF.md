@@ -131,7 +131,7 @@ Calendar-month summary of direct daily aggregates; rates below are ratios of sum
 | 2026-08 | 0 | 0 | — | 0 / 0 / 0 |
 | 2026-09 | 0 | 0 | — | 0 / 0 / 0 |
 | 2026-10 | 16 | 109235 | 34.50 | 1620 / 303 / 0 |
-| 2026-11 | 5 | 11336 | 32.90 | 251 / 80 / 0 |
+| 2026-11 | 23 | 48275 | 32.67 | 1648 / 326 / 0 |
 
 Timing is local client-observed. E2E TPS is total output tokens divided by total request duration, not a direct measurement of generation speed. Context median is input + cache-read tokens, a workload proxy, not a controlled context measurement. Session counts are distinct within each population and are not additive.
 
